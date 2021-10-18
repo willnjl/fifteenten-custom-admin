@@ -15,6 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+
+define( 'FIFTEENTEN_CUSTOMISER_DIR_PATH', plugins_url( '', __FILE__ ) );
+
+
 /**
  * The code that runs during plugin activation.
  */
