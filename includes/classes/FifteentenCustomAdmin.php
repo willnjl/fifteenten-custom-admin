@@ -22,8 +22,8 @@ class FifteentenCustomAdmin
      function register_plugin_page()
      {
           add_menu_page(
-               'Test Plugin Page',
-               'Test Plugin',
+               '15/10 Custom Admin',
+               '15.10 Admin',
                'manage_options',
                $this->getPluginSlug(),
                'fifteenten_custom_admin_page_contents'

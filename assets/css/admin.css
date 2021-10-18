@@ -1,7 +1,23 @@
+h1 {
+}
+
+img {
+  width: 100%;
+}
+
+section {
+  margin-bottom: 4rem;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .fifteenten-admin-body {
   padding: 2rem;
 }
 
 .image-preview-wrapper {
-  margin-right: 1rem;
+  margin-right: 2rem;
 }
