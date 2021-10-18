@@ -11,12 +11,13 @@ class FifteentenCustomizer
 
 
      protected $pluginSlug = "test-plugin";
-
+     protected $pluginUrl = '';
 
     public function __construct()
     {
+          $this->pluginUrl = plugins_url('Fifteenten-Customizer/');
           add_action('admin_menu', [$this, 'register_plugin_page']); // Create Admn Page
-          add_action( 'admin_enqueue_scripts', [$this, 'add_media_script'] ); 
+          add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue'] ); 
           add_action( 'admin_menu', [$this, 'register_settings'] );
     }
 
@@ -31,10 +32,24 @@ class FifteentenCustomizer
           );
     } 
 
-     function add_media_script( $hook_suffix ) 
+     function admin_enqueue( $hook_suffix ) 
      {
+          $attachment_post_id = get_option( 'media_selector_attachment_id', 0 );
           wp_enqueue_media();
-          wp_enqueue_script( 'fiteenten-media-select', plugins_url('Fifteenten-Customizer/assets/js/fifteenten_customiser_media-selector.js'), array(), _S_VERSION, true );
+          wp_enqueue_style('
+               fifteenten-custom-admin-css',
+               $this->getPluginUrl() . "assets/css/admin.css",
+               [],
+               '0.00.00',
+          );
+          wp_enqueue_script(
+               'fiteenten-media-select',
+               $this->getPluginUrl() . "assets/js/fifteenten_customiser_media-selector.js",
+               array(),
+               _S_VERSION,
+               true
+          );
+          wp_localize_script('fiteenten-media-select', 'attachment', ['id' => $attachment_post_id ]);
      }
 
 
@@ -48,6 +63,10 @@ class FifteentenCustomizer
      public function getPluginSlug()
      {
           return $this->pluginSlug;
+     }
+     public function getPluginUrl()
+     {
+          return $this->pluginUrl;
      }
 }
 

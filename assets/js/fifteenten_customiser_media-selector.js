@@ -1,60 +1,45 @@
+console.log(true);
 jQuery(document).ready(function ($) {
-  jQuery("input#myprefix_media_manager").click(function (e) {
-    e.preventDefault();
-    var image_frame;
-    if (image_frame) {
-      image_frame.open();
+  // Uploading files
+  var file_frame;
+  var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
+  var set_to_post_id = attachment.id; // Set this
+  jQuery("#upload_image_button").on("click", function (event) {
+    event.preventDefault();
+    // If the media frame already exists, reopen it.
+    if (file_frame) {
+      // Set the post ID to what we want
+      file_frame.uploader.uploader.param("post_id", set_to_post_id);
+      // Open frame
+      file_frame.open();
+      return;
+    } else {
+      // Set the wp.media post id so the uploader grabs the ID we want when initialised
+      wp.media.model.settings.post.id = set_to_post_id;
     }
-    // Define image_frame as wp.media object
-    image_frame = wp.media({
-      title: "Select Media",
-      multiple: false,
-      library: {
-        type: "image",
+    // Create the media frame.
+    file_frame = wp.media.frames.file_frame = wp.media({
+      title: "Select a image to upload",
+      button: {
+        text: "Use this image",
       },
+      multiple: false, // Set to true to allow multiple files to be selected
     });
-
-    image_frame.on("close", function () {
-      // On close, get selections and save to the hidden input
-      // plus other AJAX stuff to refresh the image preview
-      var selection = image_frame.state().get("selection");
-      var gallery_ids = new Array();
-      var my_index = 0;
-      selection.each(function (attachment) {
-        gallery_ids[my_index] = attachment["id"];
-        my_index++;
-      });
-      var ids = gallery_ids.join(",");
-      jQuery("input#myprefix_image_id").val(ids);
-      Refresh_Image(ids);
+    // When an image is selected, run a callback.
+    file_frame.on("select", function () {
+      // We set multiple to false so only get one image from the uploader
+      attachment = file_frame.state().get("selection").first().toJSON();
+      // Do something with attachment.id and/or attachment.url here
+      $("#image-preview").attr("src", attachment.url).css("width", "auto");
+      $("#image_attachment_id").val(attachment.id);
+      // Restore the main post ID
+      wp.media.model.settings.post.id = wp_media_post_id;
     });
-
-    image_frame.on("open", function () {
-      // On open, get the id from the hidden input
-      // and select the appropiate images in the media manager
-      var selection = image_frame.state().get("selection");
-      var ids = jQuery("input#myprefix_image_id").val().split(",");
-      ids.forEach(function (id) {
-        var attachment = wp.media.attachment(id);
-        attachment.fetch();
-        selection.add(attachment ? [attachment] : []);
-      });
-    });
-
-    image_frame.open();
+    // Finally, open the modal
+    file_frame.open();
+  });
+  // Restore the main ID when the add media button is pressed
+  jQuery("a.add_media").on("click", function () {
+    wp.media.model.settings.post.id = wp_media_post_id;
   });
 });
-
-// Ajax request to refresh the image preview
-function Refresh_Image(the_id) {
-  var data = {
-    action: "myprefix_get_image",
-    id: the_id,
-  };
-
-  jQuery.get(ajaxurl, data, function (response) {
-    if (response.success === true) {
-      jQuery("#myprefix-preview-image").replaceWith(response.data.image);
-    }
-  });
-}
