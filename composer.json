@@ -1,0 +1,15 @@
+{
+    "name": "fifteenten/fifteenten-custom-admin",
+    "authors": [
+        {
+            "name": "Will Leighton",
+            "email": "will@fifteenten.co.uk"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Classes\\": "src"
+        }
+    }
+}

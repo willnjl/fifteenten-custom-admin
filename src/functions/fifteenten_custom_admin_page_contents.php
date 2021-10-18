@@ -11,7 +11,8 @@ if ( isset( $_POST['submit_image_selector'] ) && isset( $_POST['image_attachment
                 Fifteen Ten Custom Settings
             </h1>
         </section>
-        <form method='post'>
+        <form method='post' action="options.php">
+            <?php settings_fields( 'fifteenten_custom_admin_options' ); ?>
             <section >
                 <div class='image-preview-wrapper'>
                     <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id' ) ); ?>' width='200'>
@@ -25,6 +26,25 @@ if ( isset( $_POST['submit_image_selector'] ) && isset( $_POST['image_attachment
                     <input type="submit" name="submit_image_selector" value="Save" class="button-primary">
                 </div>
             </section>
+            <section>
+                <div class="">        
+                    <input
+                    type="checkbox"
+                    id="fifteenten_custom_disable_comments"
+                    name="fifteenten_custom_disable_comments"
+                    value="true"
+                    <?= checked('true', get_option('fifteenten_custom_disable_comments', 'false')); ?>
+                    />
+                    
+                    <label for="fifteenten_custom_disable_comments">
+                        disable all comments    
+                    </label>
+                    
+                </div>
+        
+            </section>
+            
+                <?php  submit_button(); ?>
         </form>
     </div>
     <?
