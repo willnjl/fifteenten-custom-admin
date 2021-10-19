@@ -18,8 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'FIFTEENTEN_CUSTOMISER_DIR_PATH', plugins_url( '', __FILE__ ) );
 
-require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/src/functions.php';
+require __DIR__ . '/vendor/autoload.php';
+
 
 
 class FifteentenCustomAdmin_Plugin

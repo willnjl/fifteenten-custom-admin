@@ -60,12 +60,20 @@ class FifteentenCustomAdmin
 
      function register_settings()
      {
+
+          // Change Admin Logo
           add_option('fifteenten_custom_admin_backend_logo', 0);
           register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_admin_backend_logo' );
           
-          
+          // Disable Comments
           add_option('fifteenten_custom_disable_comments', true);
           register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_disable_comments' );
+          
+          
+          // Enable ACF Page
+          add_option('fifteenten_custom_acf_options', true);
+          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_acf_options');
+          
      }
 
 
@@ -91,6 +99,20 @@ class FifteentenCustomAdmin
           ]);
      }
 
+
+
+     public function acfOptionsEnable()
+     {
+
+          if(get_option( 'fifteenten_custom_admin_options', true)){
+
+               if( function_exists('acf_add_options_page') ) {
+                    die();
+                    acf_add_options_page();     
+               }   
+          }
+     }
+
      public function getSlug()
      {
           return $this->slug;
@@ -107,6 +129,10 @@ class FifteentenCustomAdmin
      public function commentsAreDisabled()
      {
         return get_option( 'fifteenten_custom_disable_comments', false);
+     }
+     public function acfOptionsEnabled()
+     {
+        return get_option( 'fifteenten_custom_admin_options', true);
      }
 
 }

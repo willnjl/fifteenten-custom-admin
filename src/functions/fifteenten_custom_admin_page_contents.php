@@ -43,6 +43,23 @@ if ( isset( $_POST['submit_image_selector'] ) && isset( $_POST['image_attachment
                 </div>
         
             </section>
+            <section>
+                <div class="">        
+                    <input
+                    type="checkbox"
+                    id="fifteenten_custom_acf_options"
+                    name="fifteenten_custom_acf_options"
+                    value="true"
+                    <?= checked('true', get_option('fifteenten_custom_acf_options', 'true')); ?>
+                    />
+                    
+                    <label for="fifteenten_custom_acf_options">
+                        Enable ACF Options Page  
+                    </label>
+                    
+                </div>
+        
+            </section>
             
                 <?php  submit_button(); ?>
         </form>
