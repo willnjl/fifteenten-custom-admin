@@ -1,8 +1,6 @@
 ((d, w) => {
   let loginPage = d.getElementById("login");
-
   let logo = loginPage.querySelector("h1 a");
-
   const image = {
     src: attachment.props[0],
     w: attachment.props[1],

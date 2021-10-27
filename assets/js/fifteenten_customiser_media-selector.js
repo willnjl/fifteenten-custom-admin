@@ -1,4 +1,5 @@
-console.log(true);
+console.log(attachment.id);
+console.log("media selector");
 jQuery(document).ready(function ($) {
   // Uploading files
   var file_frame;

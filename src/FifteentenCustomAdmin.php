@@ -18,6 +18,7 @@ class FifteentenCustomAdmin
           add_action('admin_menu', [$this, 'register_plugin_page']); // Create Adimn Page
           add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue'] ); // Enqueue Scripts For Media Browser
           add_action( 'admin_menu', [$this, 'register_settings'] ); // Register Settings or Plugin Options
+          add_action( 'admin_menu', [$this, 'acfOptionsEnable'] ); // Register Settings or Plugin Options
           add_action( 'login_enqueue_scripts', [$this,'replaceAdminLogo'] ); // Enqueue Scripts and CSS For Logo Change
     }
 
@@ -49,11 +50,11 @@ class FifteentenCustomAdmin
                $this->getUrl("assets/js/fifteenten_customiser_media-selector.js"),
                [],
                '0.00.00',
-               true
+               
           );
           
           wp_localize_script('fiteenten-media-select', 'attachment', [
-               'id' => $this->getAttachementPostID()
+               'id' => $this->getAttachmentPostID()
           ]);
      }
 
@@ -64,7 +65,7 @@ class FifteentenCustomAdmin
           // Change Admin Logo
           add_option('fifteenten_custom_admin_backend_logo', 0);
           register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_admin_backend_logo' );
-          
+  
           // Disable Comments
           add_option('fifteenten_custom_disable_comments', true);
           register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_disable_comments' );
@@ -95,7 +96,7 @@ class FifteentenCustomAdmin
           );
 
            wp_localize_script('fiteenten-logo-swap', 'attachment', [
-               'props' => wp_get_attachment_image_src($this->getAttachementPostID(), 'medium')
+               'props' => wp_get_attachment_image_src($this->getAttachmentPostID(), 'medium')
           ]);
      }
 
@@ -104,10 +105,9 @@ class FifteentenCustomAdmin
      public function acfOptionsEnable()
      {
 
-          if(get_option( 'fifteenten_custom_admin_options', true)){
+          if(get_option( 'fifteenten_custom_acf_options', true)){
 
                if( function_exists('acf_add_options_page') ) {
-                    die();
                     acf_add_options_page();     
                }   
           }
@@ -121,8 +121,8 @@ class FifteentenCustomAdmin
      {
           return $this->url . $dest ; 
      }
-     public function getAttachementPostID()
-     {
+     public function getAttachmentPostID()
+     {    
           return get_option( 'media_selector_attachment_id', 0 );
      }
 

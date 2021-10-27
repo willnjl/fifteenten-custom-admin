@@ -2,9 +2,11 @@
 
 function fifteenten_custom_admin_page_contents()
 {
-if ( isset( $_POST['submit_image_selector'] ) && isset( $_POST['image_attachment_id'] ) ) :
-        update_option( 'media_selector_attachment_id', absint( $_POST['image_attachment_id'] ) );
-    endif;?>
+// Save attachment ID
+	if ( isset( $_POST['submit_image_selector'] ) && isset( $_POST['image_attachment_id'] ) ) :
+		update_option( 'media_selector_attachment_id', absint( $_POST['image_attachment_id'] ) );
+	endif;
+?>
     <div class="fifteenten-admin-body">
         <section>
             <h1>
@@ -15,7 +17,7 @@ if ( isset( $_POST['submit_image_selector'] ) && isset( $_POST['image_attachment
             <?php settings_fields( 'fifteenten_custom_admin_options' ); ?>
             <section >
                 <div class='image-preview-wrapper'>
-                    <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id' ) ); ?>' width='200'>
+                    <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id', 1 ) ); ?>' width='200'>
                 </div>
                 <div>
                     <h2>
