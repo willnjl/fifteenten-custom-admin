@@ -1,6 +1,6 @@
 <?php
    /**
-   * Plugin Name: Fifteenten Admin  Customiser
+   * Plugin Name: Fifteenten Admin Customiser
    * Plugin URI: 
    * description:  Initialises Fifteenten's Custom Admin Settings
    * Version: 1.2
@@ -30,7 +30,7 @@ class FifteentenCustomAdmin_Plugin
    
    public function __construct()
    {
-      $this->pluginUrl = plugins_url('Fifteenten-Custom-Admin/');
+      $this->pluginUrl = plugin_dir_url( __FILE__ );
       $this->customSettings = new Classes\FifteentenCustomAdmin($this->pluginUrl, "FifteenTen Admin Settings");
       $this->commentDisabler = new Classes\FifteentenCommentDisabler($this->customSettings->commentsAreDisabled());
       

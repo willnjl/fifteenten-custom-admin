@@ -33,10 +33,13 @@ class FifteentenCustomAdmin
           );
     } 
 
+
      function admin_enqueue( $hook_suffix ) 
      {
-         
+    
           wp_enqueue_media();
+          
+
           
           wp_enqueue_style('
                fifteenten-custom-admin-css',
@@ -63,8 +66,8 @@ class FifteentenCustomAdmin
      {
 
           // Change Admin Logo
-          add_option('fifteenten_custom_admin_backend_logo', 0);
-          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_admin_backend_logo' );
+          add_option('media_selector_attachment_id', 0);
+          register_setting( 'fifteenten_custom_admin_options', 'media_selector_attachment_id' );
   
           // Disable Comments
           add_option('fifteenten_custom_disable_comments', true);
@@ -86,6 +89,7 @@ class FifteentenCustomAdmin
                [],
                '0.00.00',
           );
+
 
             wp_enqueue_script(
                'fiteenten-logo-swap',
