@@ -1,8 +1,8 @@
 <?php
    /**
-   * Plugin Name: Fifteenten Admin Customiser
+   * Plugin Name: 15_10 Wordpress Custom Theme Installation
    * Plugin URI: 
-   * description:  Initialises Fifteenten's Custom Admin Settings
+   * description:  Initialises 1510's Custom WP Install.
    * Version: 1.2
    * Author: Will @ Fifteenten
    * Author URI: fifteenten.co.uk

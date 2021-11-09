@@ -6,10 +6,12 @@
             "email": "will@fifteenten.co.uk"
         }
     ],
-    "require": {},
     "autoload": {
         "psr-4": {
             "Classes\\": "src"
         }
+    },
+     "require" : {
+        "composer/installers" : "~1.0"
     }
 }

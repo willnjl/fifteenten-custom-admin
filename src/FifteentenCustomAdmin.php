@@ -112,7 +112,12 @@ class FifteentenCustomAdmin
           if(get_option( 'fifteenten_custom_acf_options', true)){
 
                if( function_exists('acf_add_options_page') ) {
-                    acf_add_options_page();     
+                    $settings = [
+                         'page_title' => 'Fields',
+                         'menu_title' => 'Fields',
+                         'capability' => 'edit_posts',
+                    ];
+                    acf_add_options_page($settings);      
                }   
           }
      }
