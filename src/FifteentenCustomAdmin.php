@@ -73,10 +73,17 @@ class FifteentenCustomAdmin
           add_option('fifteenten_custom_disable_comments', true);
           register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_disable_comments' );
           
-          
           // Enable ACF Page
           add_option('fifteenten_custom_acf_options', true);
           register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_acf_options');
+          
+          // Enable Anaylytics Settings
+          add_option('fifteenten_enable_analytics', true);
+          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_enable_analytics');
+          // Enable Anaylytics ID
+          add_option('fifteenten_analytics_id', '');
+          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_analytics_id');
+
           
      }
 
