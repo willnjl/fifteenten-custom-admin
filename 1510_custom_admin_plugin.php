@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-define( 'FIFTEENTEN_CUSTOMISER_DIR_PATH', plugins_url( '', __FILE__ ) );
+define( '__FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__', plugin_dir_url( __FILE__ ) );
 
 require __DIR__ . '/src/functions.php';
 require __DIR__ . '/vendor/autoload.php';
@@ -30,10 +30,10 @@ class FifteentenCustomAdmin_Plugin
    
    public function __construct()
    {
-      $this->pluginUrl = plugin_dir_url( __FILE__ );
+      $this->pluginUrl = __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__;
       $this->customSettings = new Classes\FifteentenCustomAdmin($this->pluginUrl, "FifteenTen Admin Settings");
       $this->commentDisabler = new Classes\FifteentenCommentDisabler($this->customSettings->commentsAreDisabled());
-      
+      $this->cookieConsentor =  new \Classes\FifteentenCookieConsentor();
    }
 }
 

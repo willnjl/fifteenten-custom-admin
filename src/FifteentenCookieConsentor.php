@@ -5,13 +5,16 @@ namespace classes;
 class FifteentenCookieConsentor{
 
     private $id;
+    private $enabled;
 
-    public function __construct(bool $enabled = false, string $id = null)
-    {
+    public function __construct()
+    {   
 
-        $this->id = $id;
+        add_action( 'admin_menu', [$this, 'initSettings'] ); // Register Settings or Plugin Options 
+        $this->enabled = $this->analyticsAreEnabled();
+        $this->id = $this->analyticsId();
 
-        if($enabled){   
+        if($this->enabled){   
             add_action( 'wp_enqueue_scripts', [$this,'fiteenten_cc_scripts'] );
         }
     
@@ -20,7 +23,12 @@ class FifteentenCookieConsentor{
 
     public function initSettings()
     {
-        
+       // Enable Anaylytics Settings
+          add_option('fifteenten_enable_analytics', true);
+          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_enable_analytics');
+          // Enable Anaylytics ID
+          add_option('fifteenten_analytics_id', '');
+          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_analytics_id');
     }
 
 
@@ -39,4 +47,14 @@ class FifteentenCookieConsentor{
             ]   
         ]);
     }
+
+    public function analyticsAreEnabled()
+     {
+        return get_option( 'fifteenten_enable_analytics', true);
+     }
+
+     public function analyticsId()
+     {
+        return get_option( 'fifteenten_analytics_id', true);
+     }
 }
