@@ -1,5 +1,11 @@
 {
     "name": "fifteenten/fifteenten-custom-admin",
+     "type": "wordpress-plugin",
+     "description": "",
+    "keywords": [
+        "wordpress",
+        "plugin"
+    ],
     "authors": [
         {
             "name": "Will Leighton",
