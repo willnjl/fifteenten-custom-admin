@@ -15,6 +15,8 @@ function fifteenten_custom_admin_page_contents()
             </section>
             <form method='post' action="options.php">
                 <?php settings_fields( 'fifteenten_custom_admin_options' ); ?>
+                <?php settings_fields( 'fifteenten_comments_disabler_options' ); ?>
+                <?php settings_fields( 'fifteenten_cc_options' ); ?>
                 <section >
                     <div class='image-preview-wrapper'>
                         <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id', 1 ) ); ?>' width='200'>

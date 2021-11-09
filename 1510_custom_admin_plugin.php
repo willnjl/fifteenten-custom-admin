@@ -32,7 +32,7 @@ class FifteentenCustomAdmin_Plugin
    {
       $this->pluginUrl = __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__;
       $this->customSettings = new Classes\FifteentenCustomAdmin($this->pluginUrl, "FifteenTen Admin Settings");
-      $this->commentDisabler = new Classes\FifteentenCommentDisabler($this->customSettings->commentsAreDisabled());
+      $this->commentDisabler = new Classes\FifteentenCommentDisabler();
       $this->cookieConsentor =  new \Classes\FifteentenCookieConsentor();
    }
 }

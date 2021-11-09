@@ -6,14 +6,16 @@ namespace classes;
 class FifteentenCustomAdmin
 {
 
-     protected $url;
-     protected $slug;
+     private $url;
+     private $slug;
+     private $optionsGroup;
      
-    public function __construct($url, $slug)
+    public function __construct(string $url, string $slug, string $optionsGroup = "fifteenten_custom_admin_options")
     {     
 
           $this->url = $url;
           $this->slug = $slug;
+          $this->optionsGroup = $optionsGroup;
 
           add_action('admin_menu', [$this, 'register_plugin_page']); // Create Admin Page
           add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue'] ); // Enqueue Scripts For Media Browser
@@ -36,11 +38,8 @@ class FifteentenCustomAdmin
 
      function admin_enqueue( $hook_suffix ) 
      {
-    
           wp_enqueue_media();
-          
 
-          
           wp_enqueue_style('
                fifteenten-custom-admin-css',
                $this->getUrl( "assets/css/admin.css") ,
@@ -67,19 +66,16 @@ class FifteentenCustomAdmin
 
           // Change Admin Logo
           add_option('media_selector_attachment_id', 0);
-          register_setting( 'fifteenten_custom_admin_options', 'media_selector_attachment_id' );
+          register_setting( $this->optionsGroup, 'media_selector_attachment_id' );
   
           // Disable Comments
           add_option('fifteenten_custom_disable_comments', true);
-          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_disable_comments' );
+          register_setting( $this->optionsGroup, 'fifteenten_custom_disable_comments' );
           
           // Enable ACF Page
           add_option('fifteenten_custom_acf_options', true);
-          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_acf_options');
-          
-   
+          register_setting( $this->optionsGroup, 'fifteenten_custom_acf_options'); 
 
-          
      }
 
 
@@ -137,10 +133,6 @@ class FifteentenCustomAdmin
           return get_option( 'media_selector_attachment_id', 0 );
      }
 
-     public function commentsAreDisabled()
-     {
-        return get_option( 'fifteenten_custom_disable_comments', false);
-     }
      public function acfOptionsEnabled()
      {
         return get_option( 'fifteenten_custom_admin_options', true);

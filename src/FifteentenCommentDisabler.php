@@ -5,10 +5,17 @@ namespace classes;
 class FifteentenCommentDisabler
 {
 
-    public function __construct($isEnabled)
+    private $enabled;
+    private $optionsGroup;
+    
+    public function __construct(string $optionsGroup = 'fifteenten_comments_disabler_options')
     {
+        $this->optionGroup = $optionsGroup;
 
-        if($isEnabled){
+        add_action( 'admin_menu', [$this, 'initSettings'] ); // Register Settings or Plugin Options
+        $this->enabled = $this->commentsAreDisabled();
+
+        if($this->enabled){
 
             add_action('admin_init', [$this, 'disable_comments_post_types_support']);
             add_filter('comments_open', [$this, 'disable_comments_status'], 20, 2);
@@ -22,10 +29,10 @@ class FifteentenCommentDisabler
         }
     }
 
-    public function initOptions()
+    public function initSettings()
     {
         add_option('fifteenten_custom_disable_comments', true);
-          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_disable_comments' );
+        register_setting( $this->optionsGroup , 'fifteenten_custom_disable_comments' );
     }
 
     public function disable_comments_post_types_support() {
@@ -89,4 +96,8 @@ class FifteentenCommentDisabler
     }
 
 
+     public function commentsAreDisabled()
+     {
+        return get_option( 'fifteenten_custom_disable_comments', false);
+     }
 }

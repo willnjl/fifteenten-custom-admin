@@ -6,12 +6,15 @@ class FifteentenCookieConsentor{
 
     private $id;
     private $enabled;
+    private $optionsGroup;
 
-    public function __construct()
+    
+    public function __construct($optionsGroup = "fifteenten_cc_options")
     {   
-
+        $this->optionsGroup = $optionsGroup;
         add_action( 'admin_menu', [$this, 'initSettings'] ); // Register Settings or Plugin Options 
         $this->enabled = $this->analyticsAreEnabled();
+
         $this->id = $this->analyticsId();
 
         if($this->enabled){   
@@ -25,10 +28,10 @@ class FifteentenCookieConsentor{
     {
        // Enable Anaylytics Settings
           add_option('fifteenten_enable_analytics', true);
-          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_enable_analytics');
+          register_setting( $this->optionsGroup, 'fifteenten_enable_analytics');
           // Enable Anaylytics ID
           add_option('fifteenten_analytics_id', '');
-          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_analytics_id');
+          register_setting( $this->optionsGroup, 'fifteenten_analytics_id');
     }
 
 
