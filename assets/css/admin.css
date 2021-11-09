@@ -1,11 +1,15 @@
-h1 {
+.fifteenten-admin-body h1 {
 }
 
-img {
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.fifteenten-admin-body img {
   width: 100%;
 }
 
-section {
+.fifteenten-admin-body section {
   margin-bottom: 4rem;
   border: 1px solid #aaa;
   border-radius: 5px;
@@ -20,4 +24,8 @@ section {
 
 .image-preview-wrapper {
   margin-right: 2rem;
+}
+
+.fifteenten-admin-body ul {
+  line-height: 2rem;
 }
