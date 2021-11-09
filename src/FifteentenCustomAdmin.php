@@ -15,7 +15,7 @@ class FifteentenCustomAdmin
           $this->url = $url;
           $this->slug = $slug;
 
-          add_action('admin_menu', [$this, 'register_plugin_page']); // Create Adimn Page
+          add_action('admin_menu', [$this, 'register_plugin_page']); // Create Admin Page
           add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue'] ); // Enqueue Scripts For Media Browser
           add_action( 'admin_menu', [$this, 'register_settings'] ); // Register Settings or Plugin Options
           add_action( 'admin_menu', [$this, 'acfOptionsEnable'] ); // Register Settings or Plugin Options
@@ -149,6 +149,14 @@ class FifteentenCustomAdmin
      public function acfOptionsEnabled()
      {
         return get_option( 'fifteenten_custom_admin_options', true);
+     }
+     public function analyticsAreEnabled()
+     {
+        return get_option( 'fifteenten_enable_analytics', true);
+     }
+     public function analyticsId()
+     {
+        return get_option( 'fifteenten_analytics_id', true);
      }
 
 }

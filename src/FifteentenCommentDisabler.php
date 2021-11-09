@@ -22,6 +22,12 @@ class FifteentenCommentDisabler
         }
     }
 
+    public function initOptions()
+    {
+        add_option('fifteenten_custom_disable_comments', true);
+          register_setting( 'fifteenten_custom_admin_options', 'fifteenten_custom_disable_comments' );
+    }
+
     public function disable_comments_post_types_support() {
         $post_types = get_post_types();
         foreach ($post_types as $post_type) {
