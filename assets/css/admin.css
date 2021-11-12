@@ -1,9 +1,8 @@
 .fifteenten-admin-body h1 {
 }
 
-.wrap {
+.fifteenten-admin-body .wrap {
   max-width: 900px;
-  margin: 0 auto;
 }
 .fifteenten-admin-body img {
   width: 100%;

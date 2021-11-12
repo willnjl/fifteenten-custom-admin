@@ -20,8 +20,9 @@ class FifteentenCustomAdmin
           add_action('admin_menu', [$this, 'register_plugin_page']); // Create Admin Page
           add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue'] ); // Enqueue Scripts For Media Browser
           add_action( 'admin_menu', [$this, 'register_settings'] ); // Register Settings or Plugin Options
-          add_action( 'admin_menu', [$this, 'acfOptionsEnable'] ); // Register Settings or Plugin Options
           add_action( 'login_enqueue_scripts', [$this,'replaceAdminLogo'] ); // Enqueue Scripts and CSS For Logo Change
+
+          
     }
 
      function register_plugin_page()
@@ -68,14 +69,7 @@ class FifteentenCustomAdmin
           add_option('media_selector_attachment_id', 0);
           register_setting( $this->optionsGroup, 'media_selector_attachment_id' );
   
-          // Disable Comments
-          add_option('fifteenten_custom_disable_comments', true);
-          register_setting( $this->optionsGroup, 'fifteenten_custom_disable_comments' );
-          
-          // Enable ACF Page
-          add_option('fifteenten_custom_acf_options', true);
-          register_setting( $this->optionsGroup, 'fifteenten_custom_acf_options'); 
-
+     
      }
 
 
@@ -104,21 +98,7 @@ class FifteentenCustomAdmin
 
 
 
-     public function acfOptionsEnable()
-     {
-
-          if(get_option( 'fifteenten_custom_acf_options', true)){
-
-               if( function_exists('acf_add_options_page') ) {
-                    $settings = [
-                         'page_title' => 'Fields',
-                         'menu_title' => 'Fields',
-                         'capability' => 'edit_posts',
-                    ];
-                    acf_add_options_page($settings);      
-               }   
-          }
-     }
+    
 
      public function getSlug()
      {
@@ -132,11 +112,5 @@ class FifteentenCustomAdmin
      {    
           return get_option( 'media_selector_attachment_id', 0 );
      }
-
-     public function acfOptionsEnabled()
-     {
-        return get_option( 'fifteenten_custom_admin_options', true);
-     }
     
-
 }
