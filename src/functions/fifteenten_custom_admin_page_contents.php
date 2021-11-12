@@ -17,6 +17,7 @@ function fifteenten_custom_admin_page_contents()
                 <?php settings_fields( 'fifteenten_custom_admin_options' ); ?>
                 <?php settings_fields( 'fifteenten_comments_disabler_options' ); ?>
                 <?php settings_fields( 'fifteenten_cc_options' ); ?>
+                <?php settings_fields( 'fifteenten_custom_acf_options' ); ?>
                 <section >
                     <div class='image-preview-wrapper'>
                         <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id', 1 ) ); ?>' width='200'>
@@ -57,18 +58,15 @@ function fifteenten_custom_admin_page_contents()
                         </h2>
                         <input
                         type="checkbox"
-                        id="fifteenten_custom_acf_options"
-                        name="fifteenten_custom_acf_options"
+                        id="fifteenten_show_acf_page"
+                        name="fifteenten_show_acf_page"
                         value="true"
-                        <?= checked('true', get_option('fifteenten_custom_acf_options', 'true')); ?>
+                        <?= checked('true', get_option('fifteenten_show_acf_page', true)); ?>
                         />
-            
-                        <label for="fifteenten_custom_acf_options">
+                        <label for="fifteenten_show_acf_page">
                             Enable ACF Options Page
                         </label>
-            
                     </div>
-            
                 </section>
                 <section>
                     <div class="">
@@ -83,17 +81,15 @@ function fifteenten_custom_admin_page_contents()
                                 id="fifteenten_enable_analytics"
                                 name="fifteenten_enable_analytics"
                                 value="true"
-                                <?= checked('true', get_option('fifteenten_enable_analytics', 'true')); ?>
+                                <?= checked('true', get_option('fifteenten_enable_analytics', true)); ?>
                                 />
-            
+                                <?= get_option('fifteenten_enable_analytics', true)?>
+    
                                 <label for="fifteenten_enable_analytics">
                                     Enable 1510 Analytics
                                 </label>
                             </li>
                             <li>
-                                <label for="fifteenten_analytics_id" style="display:block;">
-                                    Analytics ID <em>eg. GTM-XXXXXXX</em>
-                                </label>
                                 <input
                                 type="text"
                                 id="fifteenten_analytics_id"
@@ -101,7 +97,21 @@ function fifteenten_custom_admin_page_contents()
                                 placeholder="GTM-XXXXXXX"
                                 value="<?= esc_attr(get_option('fifteenten_analytics_id', '')); ?>"
                                 />
-            
+                                <label for="fifteenten_analytics_id">
+                                    Analytics ID <em>eg. GTM-XXXXXXX</em>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="text" name="fifteenten_analytics_domain" id="fifteenten_analytics_domain" value="<?= esc_attr(get_option('fifteenten_analytics_domain', 'fifteenten_analytics_domain')); ?>">
+                                <label for="fifteenten_analytics_domain">
+                                    * Domain: e.g <em> example.co.uk</em>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="number" name="fifteenten_analytics_duration" id="fifteenten_analytics_duration" value="<?= esc_attr(intval(get_option('fifteenten_analytics_duration', 90))); ?>">
+                                <label for="fifteenten_analytics_duration">
+                                    Days consent lasts for
+                                </label>
                             </li>
                         </ul>
             

@@ -34,6 +34,7 @@ class FifteentenCustomAdmin_Plugin
       $this->customSettings = new Classes\FifteentenCustomAdmin($this->pluginUrl, "FifteenTen Admin Settings");
       $this->commentDisabler = new Classes\FifteentenCommentDisabler();
       $this->cookieConsentor =  new \Classes\FifteentenCookieConsentor();
+      $this->customFields = new \Classes\FifteenTenCustomACF();
    }
 }
 
