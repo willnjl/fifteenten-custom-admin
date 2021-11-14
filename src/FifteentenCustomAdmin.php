@@ -168,8 +168,8 @@ class FifteentenCustomAdmin
           <?php settings_fields( 'fifteenten_custom_admin_options' ); ?>
           <!-- do_settings_sections( string $page ) -->
           <?php do_settings_sections($this->getSlug()); ?>
-           <?php settings_errors(); ?>
-            <?php submit_button(); ?>
+          <?php settings_errors(); ?>
+          <?php submit_button(); ?>
      </form>
      <?
      }
