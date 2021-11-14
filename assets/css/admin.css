@@ -21,8 +21,9 @@
   padding: 2rem;
 }
 
-.image-preview-wrapper {
-  margin-right: 2rem;
+.image-preview-wrapper img {
+  margin: 2rem 0;
+  max-width: 16rem;
 }
 
 .fifteenten-admin-body ul {
