@@ -12,7 +12,6 @@ class FifteentenCommentDisabler
     {
         $this->optionGroup = $optionsGroup;
 
-        add_action( 'admin_menu', [$this, 'initSettings'] ); // Register Settings or Plugin Options
         $this->enabled = $this->commentsAreDisabled();
 
         if($this->enabled){
@@ -29,11 +28,6 @@ class FifteentenCommentDisabler
         }
     }
 
-    public function initSettings()
-    {
-        add_option('fifteenten_custom_disable_comments', true);
-        register_setting( $this->optionsGroup , 'fifteenten_custom_disable_comments' );
-    }
 
     public function disable_comments_post_types_support() {
         $post_types = get_post_types();
