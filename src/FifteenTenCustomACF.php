@@ -10,23 +10,8 @@ class FifteenTenCustomACF{
 
    public function __construct($optionsGroup = "fifteenten_custom_acf_options")
     {   
-        $this->optionsGroup = $optionsGroup;
-        add_action( 'admin_menu', [$this, 'initSettings'] ); // Register Settings or Plugin Options
-        $this->enabled = $this->acfOptionsEnabled();
-        if($this->enabled){
-            add_action( 'admin_menu', [$this, 'acfOptionsEnable'] ); // Register Settings or Plugin Option
-        }
-        
+        add_action( 'admin_menu', [$this, 'acfOptionsEnable'] ); // Register Settings or Plugin Option
     }
-
-
-
-    public function initSettings()
-    {
-        add_option('fifteenten_show_acf_page', true);
-        register_setting( $this->optionsGroup, 'fifteenten_show_acf_page'); 
-    }
-
 
     public function acfOptionsEnabled()
     {
@@ -49,9 +34,11 @@ class FifteenTenCustomACF{
                 'page_title' => 'Brand Info',
                 'menu_title' => 'Brand Info',
                 'capability' => 'edit_posts',
-                'icon_url' => 'dashicons-admin-site-alt'
+                'icon_url' => 'dashicons-admin-site-alt',
+                'parent_slug' => 'fifteenten-theme-settings',
+                'position' => -1,
             ];
-            acf_add_options_page($settings);      
+            acf_add_options_sub_page($settings);      
         }  
     }
 
