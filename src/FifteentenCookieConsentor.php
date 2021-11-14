@@ -16,6 +16,7 @@ class FifteentenCookieConsentor{
         add_action( 'admin_menu', [$this, 'initSettings'] ); // Register Settings or Plugin Options
         add_action('admin_menu', [$this, 'register_plugin_page']); // Create Admin Page
         $this->enabled = $this->analyticsAreEnabled();
+        add_shortcode('FifteentenAnalyticsPopup', [$this, 'shortcode_cb']);
         if($this->enabled){   
             $this->duration = $this->getDuration();
             $this->domain = $this->getDomain();
@@ -112,13 +113,20 @@ class FifteentenCookieConsentor{
      {
         ?>
         <form method='post' action="options.php">
-            <!-- settings_fields( string $option_group )  -->
             <?php settings_fields( $this->optionsGroup ); ?>
-            <!-- do_settings_sections( string $page ) -->
             <?php do_settings_sections('fifteenten_analytics_settings'); ?>
             <?php settings_errors(); ?>
             <?php submit_button(); ?>
         </form>
+
+        <hr>
+
+        <div style="opacity: 0.8">
+            <p >
+                Don't forget to add the following code to header.php
+            </p>
+            <code><?php echo ' &lt;?= do_shortcode("[FifteentenAnalyticsPopup]"); ?&gt; '?></code>
+        </div>
         <?
     }
 
@@ -166,8 +174,62 @@ class FifteentenCookieConsentor{
 
     public function renderGaScripts()
     {
+        ?>
     
-        fifteenten_ga_scripts(100);
+        <script>
+            // Define dataLayer and the gtag function.
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+
+            // Default ad_storage to 'denied'.
+            gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+            });
+            
+        </script>
+
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','<?= esc_attr(trim($this->analyticsId())); ?>');</script>
+
+        </script>
+        
+    <?
+    }
+
+    public function shortcode_cb()
+    {?>
+
+        <div id="cookie-popup">
+            <p>
+                We use cookies to improve website performance, please use the below options
+                to determine whether you're happy with this.
+            </p>
+            <a href="/cookie-policy" target="_blank">Click here to find out more</a>
+            <div class="btn-container">
+                <input
+                type="submit"
+                name="ctl00$ButtonCAccept"
+                value="I'm OK with that"
+                id="ButtonCAccept"
+                class="btn btn-accept"
+                onclick="consentGranted()"
+                />
+                <input
+                type="submit"
+                name="ctl00$ButtonCReject"
+                value="Decline All"
+                id="ButtonCReject"
+                class="btn btn-reject"
+                onclick="consentDenied()"
+                />
+            </div>
+        </div>
+    
+    <?
     }
 
     public function analyticsAreEnabled()
