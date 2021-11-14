@@ -31,10 +31,10 @@ class FifteentenCustomAdmin_Plugin
    public function __construct()
    {
       $this->pluginUrl = __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__;
-      $this->customSettings = new Classes\FifteentenCustomAdmin($this->pluginUrl, "FifteenTen Admin Settings");
-      $this->commentDisabler = new Classes\FifteentenCommentDisabler();
-      $this->cookieConsentor =  new \Classes\FifteentenCookieConsentor();
+      $this->customSettings = new Classes\FifteentenCustomAdmin($this->pluginUrl, "fifteenten-theme-settings");
       $this->customFields = new \Classes\FifteenTenCustomACF();
+      $this->cookieConsentor =  new \Classes\FifteentenCookieConsentor();
+      $this->commentDisabler = new Classes\FifteentenCommentDisabler();
    }
 }
 
