@@ -1,3 +1,7 @@
+let {
+  gtm: { domain, validConsentDuration, containerId },
+} = siteSettings;
+
 //  Cookie Storage Helper Functions
 const cookieStorage = {
   getAll: () => {
@@ -15,26 +19,30 @@ const cookieStorage = {
   },
   deleteItem: (name, domain) => {
     const expired = "Expires=Thu, 01 Jan 1970 00:00:01 GMT";
-    domain = "." + domain;
-    let string = `${name}=;path=/;domain=${domain}; ${expired}; `;
+    let string = `${name}=;path=/;domain=${"." + domain}; ${expired};`;
+    document.cookie = string;
+    string += `${name}=;path=/;domain=${domain}; ${expired};`;
     document.cookie = string;
   },
 };
 
-const deleteAllAnalyticsCookies = (domain) => {
+const cleanUpStorage = (domain) => {
+  let regex = /^(_h|_g)/;
+  // clean up cookies
   let gaCookies = Object.keys(cookieStorage.getAll()).filter((item) => {
-    let regexGa = /^_g/;
-    let regexHotJar = /^_h/;
-    console.log({
-      item,
-      ga: regexGa.test(item),
-      hotjar: regexHotJar.test(item),
-    });
-    return regexGa.test(item) || regexHotJar.test(item);
+    return regex.test(item);
   });
   gaCookies.forEach((cookie) => {
     cookieStorage.deleteItem(cookie, domain);
   });
+
+  let storageItems = Object.keys(localStorage);
+
+  storageItems
+    .filter((item) => regex.test(item))
+    .forEach((item) => {
+      localStorage.removeItem(item);
+    });
 };
 
 let updateConsentGA = (status) => {
@@ -43,6 +51,19 @@ let updateConsentGA = (status) => {
     ad_storage: str,
     analytics_storage: str,
   });
+};
+
+let appendGtm = () => {
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != "dataLayer" ? "&l=" + l : "";
+    j.async = true;
+    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, "script", "dataLayer", containerId);
 };
 
 let updateState = (state, pref) => (state[pref] = !state[pref]);
@@ -62,15 +83,17 @@ let handleClick = (event, popup, storageType, status, now) => {
   popup.style.display = "none";
   updateConsentLocal(storageType, status, now);
   updateConsentGA(status);
+  if (status) {
+    appendGtm();
+  } else {
+    cleanUpStorage();
+  }
 };
 
 ((d, w) => {
   const storageType = localStorage; // Set Consent Storage Location
 
   // Get Site Settings
-  let {
-    gtm: { domain, validConsentDuration },
-  } = siteSettings;
 
   const state = {
     marketing: false,
@@ -82,7 +105,7 @@ let handleClick = (event, popup, storageType, status, now) => {
     // check if visitor has consented before
     const cookieconsent = storageType.getItem("cookieconsent");
     let { val, time } = JSON.parse(cookieconsent) || {};
-
+	console.log(popup)
     w.onload = () => {
       // if not consented or has expired
       if (!cookieconsent || checkExpired(now, time, validConsentDuration)) {
@@ -94,14 +117,14 @@ let handleClick = (event, popup, storageType, status, now) => {
         };
       } else {
         popup.style.display = "none";
-      }
-
-      if (!val) {
-        deleteAllAnalyticsCookies(domain);
+        if (val) {
+          appendGtm();
+        } else {
+          cleanUpStorage(domain);
+        }
       }
     };
   }
-
   let preferences = popup.querySelectorAll(".cc_btn-preference");
 
   preferences.forEach((btn) => {
