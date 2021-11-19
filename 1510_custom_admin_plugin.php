@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( '__FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__', plugin_dir_url( __FILE__ ) );
 
-require __DIR__ . '/src/functions.php';
+// require __DIR__ . '/src/functions.php';
 require __DIR__ . '/vendor/autoload.php';
 
 
@@ -30,9 +30,9 @@ function activate_fifteenten_recruitment() {
 }
    
    
-// function deactivate_fifteenten_recruitment() {
-//    FifteentenCookieConsentor::deactivate();
-// }
+function deactivate_fifteenten_recruitment() {
+   // Classes\FifteentenCookieConsentor::deactivate();
+}
 
 register_activation_hook( __FILE__, 'activate_fifteenten_recruitment' );
 register_deactivation_hook( __FILE__, 'deactivate_fifteenten_recruitment' );

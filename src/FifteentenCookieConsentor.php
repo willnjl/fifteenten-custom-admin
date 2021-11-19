@@ -335,7 +335,7 @@ class FifteentenCookieConsentor{
 
     public function register_cc_endpoint()
     {
-        register_rest_route( $this->rest_endpoint, '/decline', [
+        register_rest_route( 'cookieconsent/v1', '/decline', [
             'methods' => 'POST',
             'callback' => [$this, 'click_decline'],
         ]);
