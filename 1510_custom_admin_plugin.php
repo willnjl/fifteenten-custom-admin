@@ -22,6 +22,20 @@ require __DIR__ . '/src/functions.php';
 require __DIR__ . '/vendor/autoload.php';
 
 
+/**
+ * The code that runs during plugin activation.
+ */
+function activate_fifteenten_recruitment() {	
+    Classes\FifteentenCookieConsentor::activate();
+}
+   
+   
+// function deactivate_fifteenten_recruitment() {
+//    FifteentenCookieConsentor::deactivate();
+// }
+
+register_activation_hook( __FILE__, 'activate_fifteenten_recruitment' );
+register_deactivation_hook( __FILE__, 'deactivate_fifteenten_recruitment' );
 
 class FifteentenCustomAdmin_Plugin
 {  

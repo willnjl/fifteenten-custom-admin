@@ -1,7 +1,9 @@
 let {
   gtm: { domain, validConsentDuration, containerId },
+  rest,
 } = siteSettings;
 
+console.log(true);
 //  Cookie Storage Helper Functions
 const cookieStorage = {
   getAll: () => {
@@ -78,6 +80,14 @@ let checkExpired = (now, time, duration) => {
   return result;
 };
 
+let storeDecline = () => {
+  let promise = axios.post(rest.url + "/decline", {});
+
+  promise.then((response) => {
+    console.log(response.data);
+  });
+};
+
 let handleClick = (event, popup, storageType, status, now) => {
   event.preventDefault();
   popup.style.display = "none";
@@ -86,6 +96,7 @@ let handleClick = (event, popup, storageType, status, now) => {
   if (status) {
     appendGtm();
   } else {
+    storeDecline();
     cleanUpStorage();
   }
 };
@@ -105,7 +116,7 @@ let handleClick = (event, popup, storageType, status, now) => {
     // check if visitor has consented before
     const cookieconsent = storageType.getItem("cookieconsent");
     let { val, time } = JSON.parse(cookieconsent) || {};
-	console.log(popup)
+    console.log(popup);
     w.onload = () => {
       // if not consented or has expired
       if (!cookieconsent || checkExpired(now, time, validConsentDuration)) {
