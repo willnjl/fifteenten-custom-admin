@@ -1,3 +1,9 @@
+let {
+  gtm: { domain, validConsentDuration, containerId },
+  rest,
+} = siteSettings;
+
+console.log(true);
 //  Cookie Storage Helper Functions
 const cookieStorage = {
   getAll: () => {
@@ -15,20 +21,30 @@ const cookieStorage = {
   },
   deleteItem: (name, domain) => {
     const expired = "Expires=Thu, 01 Jan 1970 00:00:01 GMT";
-    domain = "." + domain;
-    let string = `${name}=;path=/;domain=${domain}; ${expired}; `;
+    let string = `${name}=;path=/;domain=${"." + domain}; ${expired};`;
+    document.cookie = string;
+    string += `${name}=;path=/;domain=${domain}; ${expired};`;
     document.cookie = string;
   },
 };
 
-const deleteAllAnalyticsCookies = (domain) => {
+const cleanUpStorage = (domain) => {
+  let regex = /^(_h|_g)/;
+  // clean up cookies
   let gaCookies = Object.keys(cookieStorage.getAll()).filter((item) => {
-    let regex = /^_g/;
     return regex.test(item);
   });
   gaCookies.forEach((cookie) => {
     cookieStorage.deleteItem(cookie, domain);
   });
+
+  let storageItems = Object.keys(localStorage);
+
+  storageItems
+    .filter((item) => regex.test(item))
+    .forEach((item) => {
+      localStorage.removeItem(item);
+    });
 };
 
 let updateConsentGA = (status) => {
@@ -38,6 +54,21 @@ let updateConsentGA = (status) => {
     analytics_storage: str,
   });
 };
+
+let appendGtm = () => {
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != "dataLayer" ? "&l=" + l : "";
+    j.async = true;
+    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, "script", "dataLayer", containerId);
+};
+
+let updateState = (state, pref) => (state[pref] = !state[pref]);
 
 // helper funtion to update consent
 let updateConsentLocal = (storage, val, time) =>
@@ -49,13 +80,35 @@ let checkExpired = (now, time, duration) => {
   return result;
 };
 
+let storeDecline = () => {
+  let promise = axios.post(rest.url + "/decline", {});
+
+  promise.then((response) => {
+    console.log(response.data);
+  });
+};
+
+let handleClick = (event, popup, storageType, status, now) => {
+  event.preventDefault();
+  popup.style.display = "none";
+  updateConsentLocal(storageType, status, now);
+  updateConsentGA(status);
+  if (status) {
+    appendGtm();
+  } else {
+    storeDecline();
+    cleanUpStorage();
+  }
+};
+
 ((d, w) => {
   const storageType = localStorage; // Set Consent Storage Location
 
   // Get Site Settings
-  let {
-    gtm: { domain, validConsentDuration },
-  } = siteSettings;
+
+  const state = {
+    marketing: false,
+  };
 
   const popup = d.getElementById("cookie-popup");
   if (popup) {
@@ -63,23 +116,35 @@ let checkExpired = (now, time, duration) => {
     // check if visitor has consented before
     const cookieconsent = storageType.getItem("cookieconsent");
     let { val, time } = JSON.parse(cookieconsent) || {};
+    console.log(popup);
     w.onload = () => {
+      // if not consented or has expired
       if (!cookieconsent || checkExpired(now, time, validConsentDuration)) {
         popup.style.opacity = 1;
-        popup.querySelector("#ButtonCAccept").onclick = () => {
-          updateConsentLocal(storageType, true, now);
-          updateConsentGA(true);
-          popup.style.display = "none";
-        };
-        popup.querySelector("#ButtonCReject").onclick = () => {
-          updateConsentLocal(storageType, false, now);
-          updateConsentGA(false);
-          deleteAllAnalyticsCookies(domain);
-          popup.style.display = "none";
+        popup.querySelector("#ButtonCAccept").onclick = (e) =>
+          handleClick(e, popup, storageType, true, now);
+        popup.querySelector("#ButtonCUpdate").onclick = (e) => {
+          handleClick(e, popup, storageType, state.marketing, now);
         };
       } else {
         popup.style.display = "none";
+        if (val) {
+          appendGtm();
+        } else {
+          cleanUpStorage(domain);
+        }
       }
     };
   }
+  let preferences = popup.querySelectorAll(".cc_btn-preference");
+
+  preferences.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      btn.classList.toggle("active");
+      updateState(state, btn.getAttribute("data-preference"));
+      Array.from(btn.children).forEach((node) => {
+        node.classList.toggle("active");
+      });
+    });
+  });
 })(document, window);

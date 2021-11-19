@@ -1,6 +1,7 @@
 <?php
-
 namespace classes;
+
+use Carbon\Carbon;
 
 class FifteentenCookieConsentor{
 
@@ -8,20 +9,20 @@ class FifteentenCookieConsentor{
     private $enabled;
     private $optionsGroup;
     private $defaultText;
+    private $rest;
+    private $rest_endpoint;
 
     public function __construct($optionsGroup = __FILE__)
     {   
         $this->optionsGroup = $optionsGroup;
-        $this->defaultText = "We use cookies to improve website performance, please use the below options to determine whether you're happy with this.";
-
+        $this->rest_endpoint = '/cookieconsent/v1';
+        $this->rest = site_url() . '/wp-json' . $this->rest_endpoint;
         // Register Settings or Plugin Options
         add_action( 'admin_init', [$this, 'initSettings'] );
         // Create Admin Page
         add_action('admin_menu', [$this, 'register_plugin_page']); 
         // create html shortcode for Popup
         add_shortcode('FifteentenAnalyticsPopup', [$this, 'shortcode_cb']);
-        
-        
  
         $this->enabled = $this->analyticsAreEnabled();
         if($this->enabled){   
@@ -31,6 +32,7 @@ class FifteentenCookieConsentor{
             add_action( 'wp_enqueue_scripts', [$this,'fiteenten_cc_scripts'] );
             add_action( 'wp_enqueue_scripts', [$this,'fiteenten_cc_scripts'] );
             add_action('wp_head', [$this, 'renderGaScripts']);
+            add_action( 'rest_api_init', [$this, 'register_cc_endpoint']);
         }
         
     }
@@ -120,81 +122,8 @@ class FifteentenCookieConsentor{
             'fifteenten_analytics_options'
         );
         
-        
-        add_settings_section(
-            'fifteenten_analytics_personalise',
-            'Popup Customisation',
-            '',
-            'fifteenten_analytics_settings'
-        );
 
-        register_setting(
-            $this->optionsGroup,
-            'fifteenten_popup_text'
-        );
-        add_settings_field(
-           'popup-text',
-           'Popup Text',
-           [$this, 'setting_customise_text'],
-           'fifteenten_analytics_settings',
-           'fifteenten_analytics_personalise',
-       );
-      
-        register_setting(
-            $this->optionsGroup,
-            'fifteenten_popup_bg'
-        );
-        add_settings_field(
-           'popup-bg',
-           'Background Color',
-           [$this, 'setting_customise_bg'],
-           'fifteenten_analytics_settings',
-           'fifteenten_analytics_personalise',
-       );
-        register_setting(
-            $this->optionsGroup,
-            'fifteenten_popup_button-color'
-        );
-        add_settings_field(
-           'popup-btn',
-           'Button Color',
-           [$this, 'setting_customise_button'],
-           'fifteenten_analytics_settings',
-           'fifteenten_analytics_personalise',
-       );
-        register_setting(
-            $this->optionsGroup,
-            'fifteenten_popup_button-color--hover'
-        );
-        add_settings_field(
-           'popup-btn--hover',
-           'Button Color <small>:hover</small>',
-           [$this, 'setting_customise_hover'],
-           'fifteenten_analytics_settings',
-           'fifteenten_analytics_personalise',
-       );
-        register_setting(
-            $this->optionsGroup,
-            'fifteenten_popup_button-border-color'
-        );
-        add_settings_field(
-           'popup-btn-border',
-           'Button Border',
-           [$this, 'setting_customise_border'],
-           'fifteenten_analytics_settings',
-           'fifteenten_analytics_personalise',
-       );
-        register_setting(
-            $this->optionsGroup,
-            'fifteenten_popup_button-border-hover'
-        );
-        add_settings_field(
-           'popup-btn-border--hver',
-           'Button Border <small>:hover</small>',
-           [$this, 'setting_customise_border_hover'],
-           'fifteenten_analytics_settings',
-           'fifteenten_analytics_personalise',
-       );
+
     }
 
 
@@ -252,67 +181,21 @@ class FifteentenCookieConsentor{
         <input type='number' min="1" name='fifteenten_analytics_duration' value='<?= $option ?>' placeholder='60'/> Days
         <?
     } 
-    
-    public function setting_customise_bg()
-    {
-
-        $val = esc_attr(get_option('fifteenten_popup_bg'),);
-        ?>
-        <input type='text' name='fifteenten_popup_bg' value="<?= $val ?>" data-default-color="#0ff"  class="my-color-field"/>
-        <?
-    }
-    public function setting_customise_button()
-    {
-
-        $val = esc_attr(get_option('fifteenten_popup_button-color'));
-        ?>
-        <input type='text' name='fifteenten_popup_button-color' value="<?= $val ?>" class="my-color-field" />
-        <?
-    }
-    public function setting_customise_hover()
-    {
-
-        $val = esc_attr(get_option('fifteenten_popup_button-color--hover'));
-        ?>
-        <input type='text' name='fifteenten_popup_button-color--hover' value="<?= $val ?>" class="my-color-field" />
-        <?
-    }
-    public function setting_customise_border()
-    {
-
-        $val = esc_attr(get_option('fifteenten_popup_button-border-color'));
-        ?>
-        <input type='text' name='fifteenten_popup_button-border-color' value="<?= $val ?>" class="my-color-field" />
-        <?
-    }
-    public function setting_customise_border_hover()
-    {
-
-        $val = esc_attr(get_option('fifteenten_popup_button-border-hover'));
-        ?>
-        <input type='text' name='fifteenten_popup_button-border-hover' value="<?= $val ?>" class="my-color-field" />
-        <?
-    }
-    public function setting_customise_text()
-    {
-        $val = esc_attr(get_option('fifteenten_popup_text'), $this->defaultText);
-        ?>
-        <textarea name="fifteenten_popup_text" class="" style="height:175px" ><?= $val ?></textarea>
-        <?
-    }
-
-
 
     public function fiteenten_cc_scripts() 
     {
         wp_enqueue_style( 'fiteenten-cc-style', __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__ . 'assets/css/cookieconsent.css', array(), _S_VERSION );
+        wp_enqueue_script( 'fifteenten-axios', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', array(), _S_VERSION, true );
         wp_enqueue_script( 'fifteenten-cc-script', __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__ . 'assets/js/fifteenten_cookieconsent.js', array(), _S_VERSION, true );
         wp_localize_script('fifteenten-cc-script', 'siteSettings', [
             'gtm' => [
                 'containerId' => $this->id,
                 'validConsentDuration' => $this->duration,
                 'domain' => $this->domain,
-            ]   
+            ],   
+            'rest' => [
+                'url'  => $this->rest,
+            ],
         ]);
     }
 
@@ -340,61 +223,61 @@ class FifteentenCookieConsentor{
             });
             
         </script>
-
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','<?= esc_attr(trim($this->analyticsId())); ?>');</script>
     <?
     }
 
     public function shortcode_cb()
     {
-        $text = esc_attr(get_option('fifteenten_popup_text', $this->defaultText));
-        $color_bg =  esc_attr(get_option('fifteenten_popup_bg'));
-        $color_button = esc_attr(get_option('fifteenten_popup_button-color'));
-        $color_button_hover = esc_attr(get_option('fifteenten_popup_button-color--hover'));
-        $color_button_border = esc_attr(get_option('fifteenten_popup_button-border-color'));
-        $color_button_border_hover = esc_attr(get_option('fifteenten_popup_button-border-hover'));
         ?>
-
-        <style>
-            #cookie-popup{
-                background: <?= $color_bg; ?>;
-            }
-            #cookie-popup .btn{
-                background: <?= $color_button; ?>;
-                border-color: <?= $color_button_border; ?>;
-            }
-            #cookie-popup .btn:hover{
-                background: <?= $color_button_hover; ?>;
-                border-color: <?= $color_button_border_hover; ?>;
-            }
-
-            
-
-        </style>
         <div id="cookie-popup">
-            <p>
-             <?= empty($text) ? $this->defaultText : $text; ?>
-            </p>
-            <a href="/cookie-policy" target="_blank">Click here to find out more</a>
-            <div class="btn-container">
-                <input
-                type="submit"
-                name="ctl00$ButtonCAccept"
-                value="I'm OK with that"
-                id="ButtonCAccept"
-                class="btn btn-accept"
-                />
-                <input
-                type="submit"
-                name="ctl00$ButtonCReject"
-                value="Decline All"
-                id="ButtonCReject"
-                class="btn btn-reject"
-                />
+            <div class="cc__wrap">
+                <h2>
+                    Cookie Information 🍪
+                </h2>
+                <p>
+                    We use cookies, just like (almost) everyone else, to improve our understanding of how to improve our own website for our visitors.
+                </p>
+                <p>
+                    We want to make sure we’re providing the most informative and best arranged experience for our visitors, so we deploy a handful of industry-standard cookies to do so.
+                </p>
+                <p>
+                    Information in these cookies is available in our <a href="/cookies-policy" class="link">Cookies Policy</a> . Please note, our site is unlikely to function without ‘necessary’ cookies (same as other sites requiring cookies for aspects of their functionality). But you can choose whether or not to opt into marketing cookies below.
+                </p>
+                <ul>
+                    <li class="cc_peference_container">
+                        <div class="cc_btn-holder active">
+                            <div class="cc_btn-circle active"></div>
+                        </div>
+                        <label for="cc_essential">
+                           <strong>Necessary Cookies</strong>  - These are the cookies that are required to make the website work
+                        </label>
+                    </li>
+                    <li class="cc_peference_container">
+                        <div class="cc_btn-holder cc_btn-preference" data-preference="marketing">
+                            <div class="cc_btn-circle"></div>
+                            <input type="checkbox" class="checkbox" name="cc_analytics" >
+                        </div>
+                         <label for="cc_essential">
+                           <strong>Marketing Cookies</strong> - These are the cookies that are required for us to learn how to improve the experience of our website visitors
+                        </label>
+                    </li>
+                </ul>
+                <div class="cc_btn-container">
+                    <input
+                    type="submit"
+                    name="ctl00$ButtonCAccept"
+                    value="Update to My Selection"
+                    id="ButtonCUpdate"
+                    class="cc_btn cc_btn_reject cc_btn_default"
+                    />
+                    <input
+                    type="submit"
+                    name="ctl00$ButtonCReject"
+                    value="Agree to All & Proceed"
+                    id="ButtonCAccept"
+                    class="cc_btn cc_btn_accept cc_btn_preference"
+                    />
+                </div>
             </div>
         </div>
 
@@ -417,5 +300,57 @@ class FifteentenCookieConsentor{
     public function getDuration()
     {
         return get_option( 'fifteenten_analytics_duration', 90);
+    }
+
+    public static function activate()
+    {
+        Self::upgrade_200();
+    }
+
+
+    public static function upgrade_200()
+    {
+         global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE `{$wpdb->base_prefix}cc_decline`(
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        created_at datetime NOT NULL,
+        expires_at datetime NOT NULL,
+        PRIMARY KEY  (id)
+        ) $charset_collate;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+    }
+
+    public static function upgrade() {
+
+        $saved_version = (int) get_site_option('wp_cc_decline_db_version');
+        if ($saved_version < 200 && $this::upgrade_200()) {
+            update_site_option('wp_cc_decline_db_version', 200);
+        }
+    }
+
+
+    public function register_cc_endpoint()
+    {
+        register_rest_route( $this->rest_endpoint, '/decline', [
+            'methods' => 'POST',
+            'callback' => [$this, 'click_decline'],
+        ]);
+    }
+
+    public function click_decline()
+    {
+        global $wpdb;
+
+        $now = Carbon::now();
+        $wpdb->insert( $wpdb->base_prefix . 'cc_decline',[
+            'created_at' => $now->toIso8601String(),
+            'expires_at' => $now->add(1, 'day')->toIso8601String(),
+        ]);
+
+        return $now;
     }
 }
