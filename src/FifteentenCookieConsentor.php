@@ -1,7 +1,7 @@
 <?php
 namespace classes;
 
-use Carbon\Carbon;
+use Classes\FifteentenDecline;
 
 class FifteentenCookieConsentor{
 
@@ -9,14 +9,15 @@ class FifteentenCookieConsentor{
     private $enabled;
     private $optionsGroup;
     private $defaultText;
-    private $rest;
-    private $rest_endpoint;
+    private $rest_url;
+    private $namespace;
 
     public function __construct($optionsGroup = __FILE__)
     {   
         $this->optionsGroup = $optionsGroup;
-        $this->rest_endpoint = '/cookieconsent/v1';
-        $this->rest = site_url() . '/wp-json' . $this->rest_endpoint;
+        $this->namespace = '/cookieconsent/v1';
+        $this->rest_url = site_url() . '/wp-json' . $this->namespace;
+
         // Register Settings or Plugin Options
         add_action( 'admin_init', [$this, 'initSettings'] );
         // Create Admin Page
@@ -32,7 +33,7 @@ class FifteentenCookieConsentor{
             add_action( 'wp_enqueue_scripts', [$this,'fiteenten_cc_scripts'] );
             add_action( 'wp_enqueue_scripts', [$this,'fiteenten_cc_scripts'] );
             add_action('wp_head', [$this, 'renderGaScripts']);
-            add_action( 'rest_api_init', [$this, 'register_cc_endpoint']);
+            $decline = new FifteentenDecline($this->rest_url, $this->namespace);         
         }
         
     }
@@ -40,16 +41,6 @@ class FifteentenCookieConsentor{
     
     function register_plugin_page()
     {
-
-        // add_submenu_page(
-        //      string $parent_slug,
-        //      string $page_title,
-        //      string $menu_title,
-        //      string $capability,
-        //      string $menu_slug,
-        //      callable $function = '',
-        //      int $position = null 
-        // )
         $page = add_submenu_page(
             "fifteenten-theme-settings",
             "Analytics",
@@ -122,8 +113,6 @@ class FifteentenCookieConsentor{
             'fifteenten_analytics_options'
         );
         
-
-
     }
 
 
@@ -194,7 +183,8 @@ class FifteentenCookieConsentor{
                 'domain' => $this->domain,
             ],   
             'rest' => [
-                'url'  => $this->rest,
+                'url'  => $this->rest_url,
+                'nonce' => wp_create_nonce( 'wp_rest' ),
             ],
         ]);
     }
@@ -300,57 +290,5 @@ class FifteentenCookieConsentor{
     public function getDuration()
     {
         return get_option( 'fifteenten_analytics_duration', 90);
-    }
-
-    public static function activate()
-    {
-        Self::upgrade_200();
-    }
-
-
-    public static function upgrade_200()
-    {
-         global $wpdb;
-        $charset_collate = $wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE `{$wpdb->base_prefix}cc_decline`(
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        created_at datetime NOT NULL,
-        expires_at datetime NOT NULL,
-        PRIMARY KEY  (id)
-        ) $charset_collate;";
-
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
-    }
-
-    public static function upgrade() {
-
-        $saved_version = (int) get_site_option('wp_cc_decline_db_version');
-        if ($saved_version < 200 && $this::upgrade_200()) {
-            update_site_option('wp_cc_decline_db_version', 200);
-        }
-    }
-
-
-    public function register_cc_endpoint()
-    {
-        register_rest_route( 'cookieconsent/v1', '/decline', [
-            'methods' => 'POST',
-            'callback' => [$this, 'click_decline'],
-        ]);
-    }
-
-    public function click_decline()
-    {
-        global $wpdb;
-
-        $now = Carbon::now();
-        $wpdb->insert( $wpdb->base_prefix . 'cc_decline',[
-            'created_at' => $now->toIso8601String(),
-            'expires_at' => $now->add(1, 'day')->toIso8601String(),
-        ]);
-
-        return $now;
     }
 }

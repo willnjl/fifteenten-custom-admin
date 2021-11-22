@@ -26,7 +26,7 @@ require __DIR__ . '/vendor/autoload.php';
  * The code that runs during plugin activation.
  */
 function activate_fifteenten_recruitment() {	
-    Classes\FifteentenCookieConsentor::activate();
+   \Classes\FifteentenDecline::activate();
 }
    
    
