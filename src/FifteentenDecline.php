@@ -58,7 +58,7 @@ class FifteentenDecline{
     }
 
     public function nonce_check($request)
-    {
+    {   return false;
         $nonce = $request->get_params()['data']['_wpnonce'];
         return wp_verify_nonce($nonce,'wp_rest');
     }
@@ -73,7 +73,7 @@ class FifteentenDecline{
             'expires_at' => $now->add(1, 'day')->toIso8601String(),
         ]);
         
-        return new WP_REST_Response($now, 200);
+        return new \WP_REST_Response($now, 200);;
     }
 
 }
