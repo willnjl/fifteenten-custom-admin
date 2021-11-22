@@ -34,7 +34,7 @@
   bottom: 0;
   left: 0;
   box-shadow: 1px 1px 10px 1px #3333;
-  transition: opacity 1s;
+  transition: opacity 1s, transform 1s;
   overflow-y: scroll;
   line-height: 1.5em;
 }
@@ -46,12 +46,12 @@
 }
 
 /* line 68, cc.scss */
-#cookie-popup > a {
-  color: blue;
+#cookie-popup a {
+  color: #007aff;
 }
 
 /* line 74, cc.scss */
-#cookie-popup > a:hover {
+#cookie-popup a:hover {
   color: #444;
   text-decoration: underline;
 }
@@ -59,25 +59,22 @@
 #cookie-popup ul {
   margin: 3em 0 4rem 0;
 }
-#cookie-popup .cc_btn-container .cc_btn {
+#cookie-popup .cc__btn-container .cc__btn {
   background-color: #dcdcdc;
   border-radius: 5px;
   text-transform: uppercase;
   font-weight: 600;
-  padding: 1.25em;
+  padding: 1.5em;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  margin-bottom: 1rem;
+  font-size: 16px;
 }
-#cookie-popup .cc_btn-container .cc_btn_accept {
+#cookie-popup .cc__btn-container .cc__btn--accept {
   background-color: #27282a;
   color: white;
   border-radius: 5px;
-}
-
-@media screen and (max-width: 600px) {
-  /* line 115, cc.scss */
-  #cookie-popup {
-    max-height: 450px;
-    margin: 1rem;
-  }
 }
 
 .fifteenten-popup-preview #cookie-popup {
@@ -87,45 +84,64 @@
   max-height: 600px;
 }
 
-.cc_peference_container {
+.cc__preference_container {
   margin-bottom: 1em;
   display: flex;
 }
-.cc_peference_container label {
+.cc__preference_container label {
   display: inline-block;
 }
 
-.cc_btn-holder {
+.cc__toggle_holder {
   min-width: 50px;
   height: 26px;
   border-radius: 18px;
-  background-color: #f7f7f7;
+  background-color: #d7d7d7;
   display: flex;
   align-items: center;
   padding-left: 5px;
   padding-right: 5px;
   margin-right: 1rem;
   cursor: pointer;
+  opacity: 0.75;
 }
 
-.cc_btn-circle {
-  background-color: #ffffff;
+.cc__toggle_holder:hover {
+  opacity: 1;
+}
+
+.cc__toggle_circle {
+  background-color: #fdfdfd;
   transform: translateX(0px);
   border-radius: 50%;
   width: 20px;
   height: 20px;
   transition: 300ms;
 }
-.cc_btn-holder.active {
-  background-color: #b6b6b8;
+
+.cc__toggle_holder.cc__toggle--active {
+  background-color: #007aff;
 }
 
-.cc_btn-circle.active {
+.cc__toggle_circle.cc__toggle--active {
   background-color: #e5e5e5;
   transform: translateX(22px);
   transition: 300ms;
 }
 
-.checkbox {
+.cc__checkbox {
   display: none !important;
+}
+
+.cc__toggle--essential {
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+@media screen and (max-width: 600px) {
+  /* line 115, cc.scss */
+  #cookie-popup {
+    max-height: 450px;
+    margin: 1rem;
+  }
 }

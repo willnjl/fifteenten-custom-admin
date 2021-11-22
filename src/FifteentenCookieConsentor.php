@@ -234,39 +234,39 @@ class FifteentenCookieConsentor{
                     Information in these cookies is available in our <a href="/cookies-policy" class="link">Cookies Policy</a> . Please note, our site is unlikely to function without ‘necessary’ cookies (same as other sites requiring cookies for aspects of their functionality). But you can choose whether or not to opt into marketing cookies below.
                 </p>
                 <ul>
-                    <li class="cc_peference_container">
-                        <div class="cc_btn-holder active">
-                            <div class="cc_btn-circle active"></div>
+                    <li class="cc__preference_container">
+                        <div class="cc__toggle_holder cc__toggle--essential cc__toggle--active">
+                            <div class="cc__toggle_circle cc__toggle--active"></div>
                         </div>
-                        <label for="cc_essential">
+                        <label for="pref_essential">
                            <strong>Necessary Cookies</strong>  - These are the cookies that are required to make the website work
                         </label>
                     </li>
-                    <li class="cc_peference_container">
-                        <div class="cc_btn-holder cc_btn-preference" data-preference="marketing">
-                            <div class="cc_btn-circle"></div>
-                            <input type="checkbox" class="checkbox" name="cc_analytics" >
+                    <li class="cc__preference_container">
+                        <div class="cc__toggle_holder cc__toggle--preference" data-preference="marketing">
+                            <div class="cc__toggle_circle"></div>
+                            <input type="checkbox" class="cc__checkbox" name="pref_analytics" >
                         </div>
-                         <label for="cc_essential">
+                         <label for="pref_analytics">
                            <strong>Marketing Cookies</strong> - These are the cookies that are required for us to learn how to improve the experience of our website visitors
                         </label>
                     </li>
                 </ul>
-                <div class="cc_btn-container">
-                    <input
-                    type="submit"
-                    name="ctl00$ButtonCAccept"
-                    value="Update to My Selection"
+                <div class="cc__btn-container">
+                    <button
                     id="ButtonCUpdate"
-                    class="cc_btn cc_btn_reject cc_btn_default"
-                    />
-                    <input
-                    type="submit"
-                    name="ctl00$ButtonCReject"
-                    value="Agree to All & Proceed"
+                    class="cc__btn cc_btn--update"
+                    >
+                        Update to My Selection
+                    </button>
+                    <button
                     id="ButtonCAccept"
-                    class="cc_btn cc_btn_accept cc_btn_preference"
-                    />
+                    value="Agree to All & Proceed"
+                    class="cc__btn cc__btn--accept"
+                    >
+                        Agree to All & Proceed
+                    </button>
+                    
                 </div>
             </div>
         </div>
