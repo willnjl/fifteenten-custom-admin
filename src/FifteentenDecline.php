@@ -72,7 +72,7 @@ class FifteentenDecline{
             'created_at' => $now->toIso8601String(),
             'expires_at' => $now->add(1, 'day')->toIso8601String(),
         ]);
-        // return true;
+        
         return new WP_REST_Response($now, 200);
     }
 
