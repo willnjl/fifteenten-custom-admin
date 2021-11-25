@@ -7,11 +7,14 @@
   } = siteSettings;
 
   const state = {
-    marketing: false,
     api: {
       waiting: false,
       error: false,
     },
+  };
+
+  const preferences = {
+    marketing: false,
   };
 
   // helper funtion to check if consent has expired
@@ -19,6 +22,8 @@
     let result = Math.floor((now - time) / 10 / 60 / 60 / 24) > duration;
     return result;
   };
+
+  let updatePreference = (state, pref) => (state[pref] = !state[pref]);
 
   //  Cookie Storage Helper Functions
   const cookieStorage = {
@@ -161,7 +166,7 @@
         // handle preferences
         popup.querySelector("#ButtonCUpdate").onclick = (e) => {
           e.preventDefault();
-          handleClick(popup, state.marketing, now);
+          handleClick(popup, preferences.marketing, now);
         };
       } else {
         managePopup.remove(popup);
@@ -175,12 +180,12 @@
       }
     };
   }
-  let preferences = popup.querySelectorAll(".cc__toggle--preference");
+  let toggles = popup.querySelectorAll(".cc__toggle--preference");
 
-  preferences.forEach((btn) => {
+  toggles.forEach((btn) => {
     btn.addEventListener("click", () => {
       btn.classList.toggle("cc__toggle--active");
-      updateState(state, btn.getAttribute("data-preference"));
+      updatePreference(state, btn.getAttribute("data-preference"));
       Array.from(btn.children).forEach((node) => {
         node.classList.toggle("cc__toggle--active");
       });
