@@ -58,7 +58,7 @@ class FifteentenDecline{
     }
 
     public function nonce_check($request)
-    {   return false;
+    {
         $nonce = $request->get_params()['data']['_wpnonce'];
         return wp_verify_nonce($nonce,'wp_rest');
     }
@@ -67,13 +67,53 @@ class FifteentenDecline{
     {
         global $wpdb;
         $now = Carbon::now();
-
+        
         $wpdb->insert( $wpdb->base_prefix . 'cc_decline',[
             'created_at' => $now->toIso8601String(),
             'expires_at' => $now->add(1, 'day')->toIso8601String(),
         ]);
         
         return new \WP_REST_Response($now, 200);;
+    }
+    
+    
+    public function count()
+    {
+        global $wpdb;
+
+        $wpdb->get_results("SELECT * FROM " . $wpdb->base_prefix . "cc_decline");
+
+        return $wpdb->num_rows;
+        
+    }
+    public function lastMonth()
+    {
+        global $wpdb;
+
+        $wpdb->get_results("SELECT * FROM " . $wpdb->base_prefix . "cc_decline");
+
+        return $wpdb->num_rows;
+        
+    }
+    
+    public function thisMonth()
+    {
+
+        $now = Carbon::now();
+
+        $start = $now->startOfMonth()->format('d-m-Y h:s');
+        $end = $now->format('d-m-Y h:s');
+
+        global $wpdb;
+
+        $wpdb->get_results("
+        SELECT * FROM " . $wpdb->base_prefix . "cc_decline
+        WHERE created_at BETWEEN '" . $start . "' AND '" . $end . "';");
+        
+
+
+        return $wpdb->num_rows;
+        
     }
 
 }

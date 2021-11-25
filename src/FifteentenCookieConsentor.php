@@ -11,7 +11,7 @@ class FifteentenCookieConsentor{
     private $defaultText;
     private $rest_url;
     private $namespace;
-
+    private $decline;
     public function __construct($optionsGroup = __FILE__)
     {   
         $this->optionsGroup = $optionsGroup;
@@ -33,7 +33,7 @@ class FifteentenCookieConsentor{
             add_action( 'wp_enqueue_scripts', [$this,'fiteenten_cc_scripts'] );
             add_action( 'wp_enqueue_scripts', [$this,'fiteenten_cc_scripts'] );
             add_action('wp_head', [$this, 'renderGaScripts']);
-            $decline = new FifteentenDecline($this->rest_url, $this->namespace);         
+            $this->decline = new FifteentenDecline($this->rest_url, $this->namespace);         
         }
         
     }
@@ -105,14 +105,20 @@ class FifteentenCookieConsentor{
             [$this, 'section_analytics_cb'],
             'fifteenten_analytics_settings'
         );
-         add_settings_field(
+        add_settings_field(
             'analytics-duration',
             'Save cookie consent for',
             [$this, 'setting_analytics_duration'],
             'fifteenten_analytics_settings',
             'fifteenten_analytics_options'
         );
-        
+          
+        add_settings_section(
+           'fifteenten_decline_stats',
+           'Decline Statistics',
+           [$this, 'section_decline_cb'],
+           'fifteenten_analytics_settings'
+       );
     }
 
 
@@ -140,11 +146,22 @@ class FifteentenCookieConsentor{
     public function section_analytics_cb()
     {?>
         <div>
+            
             <p>
                 Don't forget to add the following code to header.php
             </p>
             <code><?php echo ' &lt;?= do_shortcode("[FifteentenAnalyticsPopup]"); ?&gt; '?></code>
         </div>
+    <?
+    }
+
+    public function section_decline_cb()
+    {?>
+        <ul>
+            <li><strong>Total</strong>  <?php echo $this->decline->count(); ?></li>
+            <!-- <li><strong>This Month</strong>  <?php echo $this->decline->thisMonth(); ?></li>
+            <li><strong>Last Month</strong>  <?php echo $this->decline->count(); ?></li> -->
+        </ul>
     <?
     }
     
