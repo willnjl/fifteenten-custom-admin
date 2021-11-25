@@ -139,7 +139,6 @@ class FifteentenCookieConsentor{
             <?php submit_button(); ?>
         </form>
         <hr>
-     
         <?
     }
 
@@ -159,8 +158,8 @@ class FifteentenCookieConsentor{
     {?>
         <ul>
             <li><strong>Total</strong>  <?php echo $this->decline->count(); ?></li>
-            <!-- <li><strong>This Month</strong>  <?php echo $this->decline->thisMonth(); ?></li>
-            <li><strong>Last Month</strong>  <?php echo $this->decline->count(); ?></li> -->
+            <li><strong>This Month</strong> <?php echo $this->decline->thisMonth(); ?></li>
+            <li><strong>Last Month</strong>  <?php echo $this->decline->lastMonth(); ?></li>
         </ul>
     <?
     }

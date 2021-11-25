@@ -86,32 +86,39 @@ class FifteentenDecline{
         return $wpdb->num_rows;
         
     }
-    public function lastMonth()
+    public function thisMonth()
     {
+
         global $wpdb;
 
-        $wpdb->get_results("SELECT * FROM " . $wpdb->base_prefix . "cc_decline");
+        $now = Carbon::now();
+        $format = "Y-m-d h:m:s";
+        $start = $now->startOfMonth()->format($format);
+        $end = Carbon::now()->format($format);
+
+        $q = "SELECT * FROM " . $wpdb->base_prefix . "cc_decline WHERE created_at BETWEEN '" . $start . "' AND '" . $end . "';";
+
+
+        $wpdb->get_results($q);
 
         return $wpdb->num_rows;
         
     }
-    
-    public function thisMonth()
+
+
+    public function lastMonth()
     {
-
-        $now = Carbon::now();
-
-        $start = $now->startOfMonth()->format('d-m-Y h:s');
-        $end = $now->format('d-m-Y h:s');
 
         global $wpdb;
 
-        $wpdb->get_results("
-        SELECT * FROM " . $wpdb->base_prefix . "cc_decline
-        WHERE created_at BETWEEN '" . $start . "' AND '" . $end . "';");
-        
+        $now = Carbon::now();
+        $format = "Y-m-d h:m:s";
+        $start = new Carbon('first day of last month');
+        $end = new Carbon('last day of last month');
 
+        $q = "SELECT * FROM " . $wpdb->base_prefix . "cc_decline WHERE created_at BETWEEN '" . $start->format($format) . "' AND '" . $end->format($format) . "';";
 
+        $wpdb->get_results($q);
         return $wpdb->num_rows;
         
     }
