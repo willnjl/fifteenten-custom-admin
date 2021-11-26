@@ -113,12 +113,14 @@ class FifteentenCookieConsentor{
             'fifteenten_analytics_options'
         );
           
+        if($this->decline) :  //decline settings
         add_settings_section(
            'fifteenten_decline_stats',
            'Decline Statistics',
            [$this, 'section_decline_cb'],
            'fifteenten_analytics_settings'
        );
+        endif; 
     }
 
 
@@ -155,13 +157,14 @@ class FifteentenCookieConsentor{
     }
 
     public function section_decline_cb()
-    {?>
+    { if($this->decline) : 
+    ?>
         <ul>
             <li><strong>Total</strong>  <?php echo $this->decline->count(); ?></li>
             <li><strong>This Month</strong> <?php echo $this->decline->thisMonth(); ?></li>
             <li><strong>Last Month</strong>  <?php echo $this->decline->lastMonth(); ?></li>
         </ul>
-    <?
+    <? endif;
     }
     
     public function setting_analytics_enabled()
