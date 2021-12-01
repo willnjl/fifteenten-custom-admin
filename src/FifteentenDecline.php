@@ -89,18 +89,17 @@ class FifteentenDecline{
     public function thisMonth()
     {
 
+        
         global $wpdb;
 
         $now = Carbon::now();
         $format = "Y-m-d h:m:s";
-        $start = $now->startOfMonth()->format($format);
-        $end = Carbon::now()->format($format);
+        $start = new Carbon('first day of this month');
+        $end = new Carbon('last day of this month');
 
-        $q = "SELECT * FROM " . $wpdb->base_prefix . "cc_decline WHERE created_at BETWEEN '" . $start . "' AND '" . $end . "';";
-
+        $q = "SELECT * FROM " . $wpdb->base_prefix . "cc_decline WHERE created_at BETWEEN '" . $start->format($format) . "' AND '" . $end->format($format) . "';";
 
         $wpdb->get_results($q);
-
         return $wpdb->num_rows;
         
     }
