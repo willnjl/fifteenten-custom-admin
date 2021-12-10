@@ -244,10 +244,9 @@ class Popup {
       });
     } else {
       if (val) {
-        // run GTM Code
         appendGtm(containerId);
+        updateConsentGA(true);
       } else {
-        // remove cookies
         cleanUpStorage(domain);
       }
     }
