@@ -238,58 +238,7 @@ class FifteentenCookieConsentor{
     public function shortcode_cb()
     {
         ?>
-        <div id="cookie-popup">
-            <div class="cc__wrap">
-                <h2>
-                    Cookie Information 🍪
-                </h2>
-                <p>
-                    We use cookies, just like (almost) everyone else, to improve our understanding of how to improve our own website for our visitors.
-                </p>
-                <p>
-                    We want to make sure we’re providing the most informative and best arranged experience for our visitors, so we deploy a handful of industry-standard cookies to do so.
-                </p>
-                <p>
-                    Information in these cookies is available in our <a href="/cookies-policy" class="link">Cookies Policy</a> . Please note, our site is unlikely to function without ‘necessary’ cookies (same as other sites requiring cookies for aspects of their functionality). But you can choose whether or not to opt into marketing cookies below.
-                </p>
-                <ul>
-                    <li class="cc__preference_container">
-                        <div class="cc__toggle_holder cc__toggle--essential cc__toggle--active">
-                            <div class="cc__toggle_circle cc__toggle--active"></div>
-                        </div>
-                        <label for="pref_essential">
-                           <strong>Necessary Cookies</strong>  - These are the cookies that are required to make the website work
-                        </label>
-                    </li>
-                    <li class="cc__preference_container">
-                        <div class="cc__toggle_holder cc__toggle--preference" data-preference="marketing">
-                            <div class="cc__toggle_circle"></div>
-                            <input type="checkbox" class="cc__checkbox" name="pref_analytics" >
-                        </div>
-                         <label for="pref_analytics">
-                           <strong>Marketing Cookies</strong> - These are the cookies that are required for us to learn how to improve the experience of our website visitors
-                        </label>
-                    </li>
-                </ul>
-                <div class="cc__btn-container">
-                    <button
-                    id="ButtonCUpdate"
-                    class="cc__btn cc_btn--update"
-                    >
-                        Update to My Selection
-                    </button>
-                    <button
-                    id="ButtonCAccept"
-                    value="Agree to All & Proceed"
-                    class="cc__btn cc__btn--accept"
-                    >
-                        Agree to All & Proceed
-                    </button>
-                    
-                </div>
-            </div>
-        </div>
-
+        <div></div>
     <?
     }
 
