@@ -92,8 +92,9 @@
     });
   };
 
-  let appendGtm = () => {
-    (function (w, d, s, l, i) {
+  let appendGtm = (containerId) => {
+    let AnalyticsData = document.createElement("script");
+    AnalyticsData.text = ` (function (w, d, s, l, i) {
       w[l] = w[l] || [];
       w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
       var f = d.getElementsByTagName(s)[0],
@@ -102,7 +103,8 @@
       j.async = true;
       j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
       f.parentNode.insertBefore(j, f);
-    })(window, document, "script", "dataLayer", containerId);
+    })(window, document, "script", "dataLayer", '${containerId}');`;
+    document.head.appendChild(AnalyticsData);
   };
   // helper funtion to update consent
   let updateConsentLocal = (val, time) =>
@@ -135,7 +137,7 @@
     updateConsentLocal(status, now);
     updateConsentGA(status);
     if (status) {
-      appendGtm();
+      appendGtm(containerId);
       managePopup.close(popup);
     } else {
       postDecline(popup, state);
@@ -172,7 +174,7 @@
         managePopup.remove(popup);
         if (val) {
           // run GTM Code
-          appendGtm();
+          appendGtm(containerId);
         } else {
           // remove cookies
           cleanUpStorage(domain);
