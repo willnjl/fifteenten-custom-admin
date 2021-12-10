@@ -35,7 +35,7 @@ register_deactivation_hook( __FILE__, 'deactivate_fifteenten_recruitment' );
 class FifteentenCustomAdmin_Plugin
 {  
 
-   public $version = "1.1.03";
+   public $version = "1.1.06";
 
    public function __construct()
    {
