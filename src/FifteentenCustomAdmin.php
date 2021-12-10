@@ -10,10 +10,10 @@ class FifteentenCustomAdmin
      private $slug;
      private $optionsGroup;
      
-    public function __construct(string $url, string $slug, string $optionsGroup = "fifteenten_custom_admin_options")
+    public function __construct(string $slug, string $optionsGroup = "fifteenten_custom_admin_options")
     {     
 
-          $this->url = $url;
+          $this->url = _FIFTEENTEN_PLUGIN_PATH_;
           $this->slug = $slug;
           $this->optionsGroup = $optionsGroup;
 
@@ -143,14 +143,14 @@ class FifteentenCustomAdmin
                fifteenten-custom-admin-css',
                $this->getUrl( "assets/css/admin.css") ,
                [],
-               '0.00.00',
+               _FIFTEENTEN_VERSION_,
           );
           
           wp_enqueue_script(
                'fiteenten-media-select',
                $this->getUrl("assets/js/fifteenten_customiser_media-selector.js"),
                [],
-               '0.00.00',
+               _FIFTEENTEN_VERSION_,
                
           );
           
@@ -210,7 +210,7 @@ class FifteentenCustomAdmin
                'fifteenten-custom-admin-css',
                $this->getUrl( "assets/css/login.css"),
                [],
-               '0.00.00',
+               _FIFTEENTEN_VERSION_,
           );
 
 
@@ -218,7 +218,7 @@ class FifteentenCustomAdmin
                'fiteenten-logo-swap',
                $this->getUrl("assets/js/fifteenten_customiser_logo-swap.js"),
                [],
-               '0.00.00',
+               _FIFTEENTEN_VERSION_,
                true
           );
 

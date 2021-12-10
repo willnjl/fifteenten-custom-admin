@@ -192,9 +192,9 @@ class FifteentenCookieConsentor{
 
     public function fiteenten_cc_scripts() 
     {
-        wp_enqueue_style( 'fiteenten-cc-style', __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__ . 'assets/css/cookieconsent.css', array(), _S_VERSION );
-        wp_enqueue_script( 'fifteenten-axios', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', array(), _S_VERSION, true );
-        wp_enqueue_script( 'fifteenten-cc-script', __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__ . 'assets/js/fifteenten_cookieconsent.js', array(), _S_VERSION, true );
+        wp_enqueue_style( 'fiteenten-cc-style', _FIFTEENTEN_PLUGIN_PATH_ . 'assets/css/cookieconsent.css', array(), _FIFTEENTEN_VERSION_ );
+        wp_enqueue_script( 'fifteenten-axios', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', array(), _FIFTEENTEN_VERSION_, true );
+        wp_enqueue_script( 'fifteenten-cc-script', _FIFTEENTEN_PLUGIN_PATH_ . 'assets/js/fifteenten_cookieconsent.js', array(), _FIFTEENTEN_VERSION_, true );
         wp_localize_script('fifteenten-cc-script', 'siteSettings', [
             'gtm' => [
                 'containerId' => $this->id,
@@ -210,9 +210,9 @@ class FifteentenCookieConsentor{
 
     public function admin_custom_css()
     {
-        wp_enqueue_style( 'fiteenten-cc-style', __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__ . 'assets/css/cookieconsent.css', array(), _S_VERSION );
+        wp_enqueue_style( 'fiteenten-cc-style', _FIFTEENTEN_PLUGIN_PATH_ . 'assets/css/cookieconsent.css', array(), _FIFTEENTEN_VERSION_ );
 	    wp_enqueue_style( 'wp-color-picker' );
-	    wp_enqueue_script( 'fifteenten_wp_cp', __FIFTEENTEN_CUSTOM_ADMIN_DIR_PATH__ . 'assets/js/fifteenten_wp_cp.js', array( 'wp-color-picker' ), false, true );
+	    wp_enqueue_script( 'fifteenten_wp_cp', _FIFTEENTEN_PLUGIN_PATH_ . 'assets/js/fifteenten_wp_cp.js', array( 'wp-color-picker' ), false, true );
 
     }
 
