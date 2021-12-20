@@ -172,6 +172,19 @@ class Popup {
       f.parentNode.insertBefore(j, f);
     })(window, document, "script", "dataLayer", '${containerId}');`;
     document.head.appendChild(AnalyticsData);
+
+    let nojs = d.createElement("iframe");
+
+    nojs.setAttribute(
+      "src",
+      `https://www.googletagmanager.com/ns.html?id=${containerId}`
+    );
+
+    nojs.setAttribute("height", 0);
+    nojs.setAttribute("width", 0);
+    nojs.style.display = "none";
+    nojs.style.visibility = "hidden";
+    d.querySelector("body").prepend(nojs);
   };
   // helper funtion to update consent
   let updateConsentLocal = (val, time) =>
