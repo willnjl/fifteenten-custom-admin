@@ -225,43 +225,41 @@ class Popup {
   const cookieconsent = storageType.getItem("cookieconsent");
   let { val, time } = JSON.parse(cookieconsent) || {};
 
-  w.onload = () => {
-    // if not consented or has expired
-    if (!cookieconsent || checkExpired(now, time, validConsentDuration)) {
-      const popup = new Popup(html_popup);
-      popup.show();
+  // if not consented or has expired
+  if (!cookieconsent || checkExpired(now, time, validConsentDuration)) {
+    const popup = new Popup(html_popup);
+    popup.show();
 
-      // user accepts
-      popup.get().querySelector("#ButtonCAccept").onclick = (e) => {
-        e.preventDefault();
-        handleClick(popup, true, now);
-        popup.close();
-      };
+    // user accepts
+    popup.get().querySelector("#ButtonCAccept").onclick = (e) => {
+      e.preventDefault();
+      handleClick(popup, true, now);
+      popup.close();
+    };
 
-      // handle preferences
-      popup.get().querySelector("#ButtonCUpdate").onclick = (e) => {
-        e.preventDefault();
-        handleClick(popup, preferences.marketing, now);
-      };
+    // handle preferences
+    popup.get().querySelector("#ButtonCUpdate").onclick = (e) => {
+      e.preventDefault();
+      handleClick(popup, preferences.marketing, now);
+    };
 
-      let toggles = popup.get().querySelectorAll(".cc__toggle--preference");
+    let toggles = popup.get().querySelectorAll(".cc__toggle--preference");
 
-      toggles.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          btn.classList.toggle("cc__toggle--active");
-          updatePreference(state, btn.getAttribute("data-preference"));
-          Array.from(btn.children).forEach((node) => {
-            node.classList.toggle("cc__toggle--active");
-          });
+    toggles.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        btn.classList.toggle("cc__toggle--active");
+        updatePreference(state, btn.getAttribute("data-preference"));
+        Array.from(btn.children).forEach((node) => {
+          node.classList.toggle("cc__toggle--active");
         });
       });
+    });
+  } else {
+    if (val) {
+      appendGtm(containerId);
+      updateConsentGA(true);
     } else {
-      if (val) {
-        appendGtm(containerId);
-        updateConsentGA(true);
-      } else {
-        cleanUpStorage(domain);
-      }
+      cleanUpStorage(domain);
     }
-  };
+  }
 })(document, window);
