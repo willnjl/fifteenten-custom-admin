@@ -21,11 +21,193 @@ class FifteentenCustomAdmin
           add_action('admin_enqueue_scripts', [$this, 'admin_enqueue']); // Enqueue Scripts For Media Browser
           add_action('admin_init', [$this, 'register_settings']); // Register Settings or Plugin Options
           add_action('login_enqueue_scripts', [$this, 'replaceAdminLogo']); // Enqueue Scripts and CSS For Logo Change
-
-
+          add_action('acf/init', [$this, 'init_social_media_options_page']);
      }
+     public function init_social_media_options_page()
+     {
 
-     function register_plugin_page()
+          // Check function exists.
+          if (function_exists('acf_add_options_page')) {
+
+               // Add parent.
+               $parent = acf_add_options_page(array(
+                    'page_title'  => __('Social Media Options'),
+                    'menu_title'  => __('Social Media'),
+                    'redirect'    => false,
+                    'icon_url' => 'dashicons-share',
+               ));
+
+               // Add sub page.
+               // $child = acf_add_options_page(array(
+               //      'page_title'  => __('Social Settings'),
+               //      'menu_title'  => __('Social'),
+               //      'parent_slug' => $parent['menu_slug'],
+               // ));
+          }
+
+          if (function_exists('acf_add_local_field_group')) :
+
+               acf_add_local_field_group(array(
+                    'key' => 'group_6241c48442524',
+                    'title' => 'Social Media Options',
+                    'fields' => array(
+                         array(
+                              'key' => 'field_6241c4c93ab38',
+                              'label' => 'Address',
+                              'name' => 'address',
+                              'type' => 'textarea',
+                              'instructions' => '',
+                              'required' => 0,
+                              'conditional_logic' => 0,
+                              'wrapper' => array(
+                                   'width' => '',
+                                   'class' => '',
+                                   'id' => '',
+                              ),
+                              'default_value' => '',
+                              'placeholder' => '',
+                              'prepend' => '',
+                              'append' => '',
+                              'maxlength' => '',
+                         ),
+                         array(
+                              'key' => 'field_6241c48bdde99',
+                              'label' => 'Email',
+                              'name' => 'email',
+                              'type' => 'text',
+                              'instructions' => '',
+                              'required' => 0,
+                              'conditional_logic' => 0,
+                              'wrapper' => array(
+                                   'width' => '',
+                                   'class' => '',
+                                   'id' => '',
+                              ),
+                              'default_value' => '',
+                              'placeholder' => '',
+                              'prepend' => '',
+                              'append' => '',
+                              'maxlength' => '',
+                         ),
+                         array(
+                              'key' => 'field_6241c4ab3a1c6',
+                              'label' => 'Phone',
+                              'name' => 'phone',
+                              'type' => 'text',
+                              'instructions' => '',
+                              'required' => 0,
+                              'conditional_logic' => 0,
+                              'wrapper' => array(
+                                   'width' => '',
+                                   'class' => '',
+                                   'id' => '',
+                              ),
+                              'default_value' => '',
+                              'placeholder' => '',
+                              'prepend' => '',
+                              'append' => '',
+                              'maxlength' => '',
+                         ),
+                         array(
+                              'key' => 'field_6241c4a3dde9a',
+                              'label' => 'Twitter',
+                              'name' => 'twitter',
+                              'type' => 'text',
+                              'instructions' => '',
+                              'required' => 0,
+                              'conditional_logic' => 0,
+                              'wrapper' => array(
+                                   'width' => '',
+                                   'class' => '',
+                                   'id' => '',
+                              ),
+                              'default_value' => '',
+                              'placeholder' => '',
+                              'prepend' => '',
+                              'append' => '',
+                              'maxlength' => '',
+                         ),
+                         array(
+                              'key' => 'field_6241c4b16ddf1',
+                              'label' => 'Linkedin',
+                              'name' => 'linkedin',
+                              'type' => 'text',
+                              'instructions' => '',
+                              'required' => 0,
+                              'conditional_logic' => 0,
+                              'wrapper' => array(
+                                   'width' => '',
+                                   'class' => '',
+                                   'id' => '',
+                              ),
+                              'default_value' => '',
+                              'placeholder' => '',
+                              'prepend' => '',
+                              'append' => '',
+                              'maxlength' => '',
+                         ),
+                         array(
+                              'key' => 'field_6241c4b8fc87c',
+                              'label' => 'Instagram',
+                              'name' => 'instagram',
+                              'type' => 'text',
+                              'instructions' => '',
+                              'required' => 0,
+                              'conditional_logic' => 0,
+                              'wrapper' => array(
+                                   'width' => '',
+                                   'class' => '',
+                                   'id' => '',
+                              ),
+                              'default_value' => '',
+                              'placeholder' => '',
+                              'prepend' => '',
+                              'append' => '',
+                              'maxlength' => '',
+                         ),
+                         array(
+                              'key' => 'field_6241c4c0c5e1a',
+                              'label' => 'Facebook',
+                              'name' => 'facebook',
+                              'type' => 'text',
+                              'instructions' => '',
+                              'required' => 0,
+                              'conditional_logic' => 0,
+                              'wrapper' => array(
+                                   'width' => '',
+                                   'class' => '',
+                                   'id' => '',
+                              ),
+                              'default_value' => '',
+                              'placeholder' => '',
+                              'prepend' => '',
+                              'append' => '',
+                              'maxlength' => '',
+                         ),
+                    ),
+                    'location' => array(
+                         array(
+                              array(
+                                   'param' => 'options_page',
+                                   'operator' => '==',
+                                   'value' => 'acf-options-social-media',
+                              ),
+                         ),
+                    ),
+                    'menu_order' => 0,
+                    'position' => 'normal',
+                    'style' => 'default',
+                    'label_placement' => 'top',
+                    'instruction_placement' => 'label',
+                    'hide_on_screen' => '',
+                    'active' => true,
+                    'description' => '',
+                    'show_in_rest' => 0,
+               ));
+
+          endif;
+     }
+     public function register_plugin_page()
      {
 
           // add_menu_page( 
@@ -39,16 +221,13 @@ class FifteentenCustomAdmin
           // 
           // )
 
-          $icon_url = _FIFTEENTEN_PLUGIN_PATH_ . 'assets/1510.svg';
           add_menu_page(
                '15/10 Theme Admin',
                '15.10',
                'manage_options',
                $this->getSlug(),
-               [$this, 'page_cb'],
-               $icon_url
+               [$this, 'page_cb']
           );
-
 
           // add_submenu_page(
           //      string $parent_slug,
